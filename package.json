@@ -1,0 +1,13 @@
+{
+  "name": "arogya-q-backend",
+  "version": "1.0.0",
+  "description": "Backend for AROGYA.Q: appointments, live queue, limited-attempt logins",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "DEMO_MODE=1 node server.js"
+  },
+  "engines": { "node": ">=22.13" },
+  "license": "UNLICENSED",
+  "private": true
+}

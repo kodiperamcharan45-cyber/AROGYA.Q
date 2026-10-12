@@ -1,0 +1,1373 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AROGYA.Q</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Nunito:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap">
+<style>
+/* Layout: dark teal app bar (brand, language, Patient | Staff switch) over one 1080px column, pill tabs below.
+   Patient pages open with a deck-style hero (clock, check and chat circles); queue tokens are drawn as tickets.
+   Staff pages sit behind a sign-in with a lockout, then table and board first. Footer carries copyright and terms.
+   Palette and type follow the AROGYA.Q deck: deep teal, mint, coral; DM Sans display, Nunito text, Noto for Indic scripts. */
+:root{
+  --bg:#F2F8F7; --bg-top:#E3F3EF; --surface:#FFFFFF; --surface-2:#E9F1EF; --ink:#103D3F; --ink-2:#4A6264; --line:#D3E0DE;
+  --accent:#0E7C66; --accent-ink:#FFFFFF; --mint:#5DD4B8; --mint-soft:#DDF5EE; --coral:#E8765A;
+  --emerg:#B83A22; --emerg-bg:#FDE9E3; --emerg-btn:#B83A22; --emerg-btn-ink:#FFFFFF;
+  --warn:#7A5200; --warn-bg:#FFF0CC; --info:#14566B; --info-bg:#DDF0F6;
+  --bar-bg:#0F3A3C; --bar-ink:#EAF6F3; --hero-a:#0F3A3C; --hero-b:#1B6E68; --ticket-a:#0F3F40; --ticket-b:#18635F;
+  --c1:#D6F2E9; --c1i:#0B6B58; --c2:#FBE0D6; --c2i:#A33A22; --c3:#D4E9F5; --c3i:#14566B;
+  --c4:#FBE9C6; --c4i:#7A5200; --c5:#E3DDF5; --c5i:#4B3A8C; --c6:#DDE9E7; --c6i:#103D3F;
+  --shadow:0 1px 2px rgba(16,61,63,.05),0 10px 28px rgba(16,61,63,.07);
+  --f-display:'DM Sans','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Tamil',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-body:'Nunito','Noto Sans Devanagari','Noto Sans Telugu','Noto Sans Tamil',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B2E30; --bg-top:#0F3A3C; --surface:#134144; --surface-2:#194C4F; --ink:#EAF6F3; --ink-2:#A8C7C2; --line:#27595B;
+    --accent:#5DD4B8; --accent-ink:#0D3335; --mint:#5DD4B8; --mint-soft:#1B5654; --coral:#F28B6E;
+    --emerg:#FFA58C; --emerg-bg:#4B2B27; --emerg-btn:#FF9C80; --emerg-btn-ink:#3A1710;
+    --warn:#F5D58A; --warn-bg:#4A3B17; --info:#9BD8EC; --info-bg:#173F4D;
+    --bar-bg:#082527; --hero-a:#0C3234; --hero-b:#175C58;
+    --c1:#1D5C55; --c1i:#BDF2E3; --c2:#5A3029; --c2i:#FFC1AE; --c3:#1D4A5A; --c3i:#B6E3F3;
+    --c4:#4F3F1A; --c4i:#F7DE9C; --c5:#3A3463; --c5i:#D6CCF5; --c6:#234F51; --c6i:#D3ECE8;
+    --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B2E30; --bg-top:#0F3A3C; --surface:#134144; --surface-2:#194C4F; --ink:#EAF6F3; --ink-2:#A8C7C2; --line:#27595B;
+  --accent:#5DD4B8; --accent-ink:#0D3335; --mint:#5DD4B8; --mint-soft:#1B5654; --coral:#F28B6E;
+  --emerg:#FFA58C; --emerg-bg:#4B2B27; --emerg-btn:#FF9C80; --emerg-btn-ink:#3A1710;
+  --warn:#F5D58A; --warn-bg:#4A3B17; --info:#9BD8EC; --info-bg:#173F4D;
+  --bar-bg:#082527; --hero-a:#0C3234; --hero-b:#175C58;
+  --c1:#1D5C55; --c1i:#BDF2E3; --c2:#5A3029; --c2i:#FFC1AE; --c3:#1D4A5A; --c3i:#B6E3F3;
+  --c4:#4F3F1A; --c4i:#F7DE9C; --c5:#3A3463; --c5i:#D6CCF5; --c6:#234F51; --c6i:#D3ECE8;
+  --shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background-color:var(--bg);background-image:linear-gradient(180deg,var(--bg-top) 0,var(--bg) 460px);background-repeat:no-repeat;color:var(--ink);font:15px/1.6 var(--f-body);padding-inline:16px;padding-block:0;min-height:100%}
+h1,h2,h3,h4{font-family:var(--f-display);margin:0;line-height:1.3;text-wrap:balance;color:var(--ink)}
+h2{font-size:20px;font-weight:700}
+h3{font-size:16px;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin-inline:auto;padding-block:24px 0}
+.inner{max-width:1080px;margin-inline:auto}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)}
+.small{font-size:13px}
+.eyebrow{font:600 12px/1.3 var(--f-display);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* app bar */
+.bar-wrap{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar-bg);color:var(--bar-ink);margin-inline:-16px;padding-inline:16px;box-shadow:0 2px 14px rgba(0,0,0,.18)}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding-block:12px;max-width:1080px;margin-inline:auto}
+.brand{display:flex;align-items:center;gap:10px;font:700 21px/1 var(--f-display);letter-spacing:.03em;color:var(--bar-ink)}
+.brand i{font-style:normal;color:var(--mint)}
+.brand svg{color:var(--mint);flex:none}
+.bar-r{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-left:auto}
+.langpick{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border-radius:999px;padding:0 6px 0 12px;color:var(--bar-ink)}
+.langpick select{appearance:none;background:transparent;border:0;color:var(--bar-ink);font:600 14px var(--f-display);padding:8px 8px 8px 2px;cursor:pointer;max-width:130px}
+.langpick select option{color:#103D3F;background:#fff}
+.switch{display:inline-flex;background:rgba(255,255,255,.1);border-radius:999px;padding:4px;gap:2px}
+.switch button{border:0;background:transparent;border-radius:999px;padding:7px 16px;font:600 14px var(--f-display);color:var(--bar-ink)}
+.switch button[aria-selected="true"]{background:var(--mint);color:#0D3335}
+.sync{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(234,246,243,.8);width:100%}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mint);flex:none}
+.dot.off{background:var(--coral)}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:var(--surface-2);border-radius:16px;padding:5px;margin-bottom:24px;align-items:center}
+.tabs button{display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;white-space:nowrap;padding:10px 16px;border-radius:12px;font:600 15px var(--f-display);color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.tabs button[aria-selected="true"] .ic{color:var(--accent)}
+.tabs .who{margin-left:auto;display:flex;align-items:center;gap:8px;padding-inline:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+
+/* generic */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.stack{display:flex;flex-direction:column;gap:20px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.between{justify-content:space-between}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media (min-width:920px){.cols{grid-template-columns:minmax(0,1fr) 300px}.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px);align-self:start}}
+.btn{border:1px solid transparent;background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:11px 20px;font:600 15px var(--f-display);box-shadow:0 1px 0 rgba(255,255,255,.15) inset}
+.btn:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);box-shadow:none}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.urgent{background:var(--emerg-btn);color:var(--emerg-btn-ink)}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:9px}
+.btn.big{padding:14px 26px;font-size:17px;border-radius:14px}
+label.fld{display:flex;flex-direction:column;gap:6px;font:600 13px var(--f-display);color:var(--ink-2);min-width:0}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;font:400 15px var(--f-body);color:var(--ink)}
+.inp:focus-visible{outline-offset:0;border-color:var(--accent)}
+.inp:disabled{opacity:.5}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.err{color:var(--emerg);background:var(--emerg-bg);border-radius:12px;padding:10px 14px;font-weight:600}
+.note{background:var(--info-bg);color:var(--info);border-radius:12px;padding:12px 14px}
+.ok{background:var(--mint-soft);color:var(--ink);border-radius:14px;padding:14px 16px}
+
+/* pills */
+.pill{display:inline-block;border-radius:999px;padding:3px 11px;font:600 12px/1.6 var(--f-display);white-space:nowrap}
+.pill.booked{background:var(--info-bg);color:var(--info)}
+.pill.checked_in{background:var(--warn-bg);color:var(--warn)}
+.pill.in_consult{background:var(--mint-soft);color:var(--ink)}
+.pill.done{background:var(--surface-2);color:var(--ink-2)}
+.pill.cancelled{background:var(--surface-2);color:var(--ink-2);text-decoration:line-through}
+.pill.no_show{background:var(--emerg-bg);color:var(--emerg)}
+.pill.emerg{background:var(--emerg-btn);color:var(--emerg-btn-ink)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-radius:28px;background:linear-gradient(125deg,var(--hero-a),var(--hero-b));color:#fff;padding:38px 36px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:18px;align-items:center;margin-bottom:24px;border:1px solid rgba(255,255,255,.08)}
+.hero h1{color:#fff;font-size:clamp(28px,4.6vw,44px);font-weight:700;letter-spacing:-.01em;margin-block:10px 12px}
+.hero p{color:rgba(255,255,255,.86);font-size:16px;max-width:52ch}
+.hero .eyebrow-l{font:600 13px/1.3 var(--f-display);letter-spacing:.09em;text-transform:uppercase;color:var(--mint)}
+.hero-chips{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.hero-chips li{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border-radius:999px;padding:8px 14px;font:600 14px var(--f-display)}
+.hero-chips .ic{color:var(--mint)}
+.hero-art svg{width:100%;height:auto;max-height:250px;display:block}
+@media (max-width:760px){.hero{grid-template-columns:minmax(0,1fr);padding:28px 22px}.hero-art{display:none}}
+
+/* booking */
+.sh{display:flex;align-items:center;gap:12px}
+.sn{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:700 14px var(--f-display);flex:none}
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:16px}
+.doc{text-align:left;background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:46px minmax(0,1fr);gap:2px 12px;align-items:center}
+.doc:hover{border-color:var(--accent)}
+.doc[aria-pressed="true"]{border-color:var(--accent);background:var(--mint-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.av{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;font:700 16px var(--f-display);flex:none}
+.doc .av{grid-row:span 3}
+.doc b{font:700 15px var(--f-display);line-height:1.3}
+.doc .d2{font-size:13px;color:var(--ink-2)}
+.doc .d3{font-size:12.5px;color:var(--accent);font-weight:700}
+.doc[aria-pressed="true"] .d2,.doc[aria-pressed="true"] .d3{color:var(--ink)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-block:16px 4px}
+.day{flex:none;min-width:68px;background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:9px 10px;display:flex;flex-direction:column;align-items:center}
+.day span{font-size:12px;color:var(--ink-2)}
+.day b{font:700 20px var(--f-display)}
+.day[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 6px 16px rgba(14,124,102,.3)}
+.day[aria-pressed="true"] span{color:var(--accent-ink)}
+.day:disabled{opacity:.4;cursor:not-allowed}
+.slotgroup{margin-top:16px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;margin-top:8px}
+.slot{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:9px 4px;font:600 14px var(--f-display);font-variant-numeric:tabular-nums}
+.slot:hover:not(:disabled){border-color:var(--accent)}
+.slot[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 6px 14px rgba(14,124,102,.28)}
+.slot:disabled{opacity:.38;text-decoration:line-through;cursor:not-allowed}
+.chan{display:inline-flex;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+.chan button{border:0;background:var(--bg);padding:10px 18px;font:600 14px var(--f-display);color:var(--ink-2)}
+.chan button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.after{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.after li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start;font-size:14px}
+.after b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--mint-soft);color:var(--accent);font:700 13px var(--f-display)}
+.railhead{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));border-radius:var(--r);padding:20px;color:#fff}
+.railhead h3{color:#fff}.railhead .after b{background:rgba(255,255,255,.16);color:var(--mint)}
+.railhead .after li{color:rgba(255,255,255,.9)}
+
+/* visit */
+.visit{display:flex;flex-direction:column;gap:18px}
+.vhead{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.vhead .vt{flex:1;min-width:180px}
+.vhead h3{font-size:18px}
+.vhead .vr{text-align:right}
+.steps{display:flex;list-style:none;margin:6px 0 0;padding:0}
+.steps li{flex:1;position:relative;text-align:center;font:600 12.5px var(--f-display);color:var(--ink-2);padding-top:36px;min-width:0}
+.steps li::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:var(--surface-2);border:2px solid var(--line);z-index:1}
+.steps li::after{content:"";position:absolute;top:13px;left:-50%;width:100%;height:3px;background:var(--line)}
+.steps li:first-child::after{display:none}
+.steps li.on{color:var(--ink)}
+.steps li.on::before{content:"\2713";background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-size:14px;line-height:24px}
+.steps li.on::after,.steps li.now::after{background:var(--accent)}
+.steps li.now{color:var(--ink)}
+.steps li.now::before{background:var(--surface);border-color:var(--coral);box-shadow:0 0 0 5px rgba(232,118,90,.25)}
+.ticket{display:grid;grid-template-columns:200px minmax(0,1fr);background:linear-gradient(120deg,var(--ticket-a),var(--ticket-b));color:#fff;border-radius:20px}
+.ticket .stub{position:relative;padding:20px 22px;border-right:2px dashed rgba(255,255,255,.35);display:flex;flex-direction:column;gap:6px;justify-content:center}
+.ticket .stub::before,.ticket .stub::after{content:"";position:absolute;right:-12px;width:22px;height:22px;border-radius:50%;background:var(--surface)}
+.ticket .stub::before{top:-11px}.ticket .stub::after{bottom:-11px}
+.ticket .eyebrow-l{font:600 12px/1.3 var(--f-display);letter-spacing:.09em;text-transform:uppercase;color:var(--mint)}
+.tok{font:700 40px/1.1 var(--f-display);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.ticket .qstats{padding:20px 22px;align-self:center}
+.qstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:14px}
+.qstats div b{display:block;font:700 22px/1.25 var(--f-display);font-variant-numeric:tabular-nums}
+.qstats div span{font-size:12.5px;color:rgba(255,255,255,.78)}
+@media (max-width:560px){
+  .ticket{grid-template-columns:minmax(0,1fr)}
+  .ticket .stub{border-right:0;border-bottom:2px dashed rgba(255,255,255,.35)}
+  .ticket .stub::before{top:auto;bottom:-11px;left:-11px;right:auto}
+  .ticket .stub::after{bottom:-11px;right:-11px}
+  .tok{font-size:34px}
+}
+.pass{display:flex;flex-wrap:wrap;gap:16px;align-items:center;border:2px dashed var(--line);border-radius:16px;padding:14px}
+.qr{background:#fff;padding:10px;border-radius:12px;width:156px;max-width:100%;border:1px solid var(--line)}
+.qr svg{display:block;width:100%;height:auto}
+.qr .idtxt{font:700 18px var(--f-display);color:#103D3F;text-align:center;padding:30px 0}
+.stars{display:flex;gap:4px}
+.stars button{border:0;background:transparent;font-size:30px;line-height:1;color:var(--line);padding:2px}
+.stars button.on{color:var(--coral)}
+
+/* board */
+.boardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.bcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.bcard.mine{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),var(--shadow)}
+.bcard .bh{display:flex;gap:12px;align-items:center}
+.bnow{font:700 36px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.bnowbox{background:var(--bg);border-radius:14px;padding:12px 14px}
+
+/* login */
+.login{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);border-radius:28px;overflow:hidden;border:1px solid var(--line);background:var(--surface);max-width:900px;margin-inline:auto;box-shadow:var(--shadow)}
+.login .side{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;padding:36px 30px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.login .side h2{color:#fff;font-size:24px}
+.login .side p{color:rgba(255,255,255,.86)}
+.login .side .big{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--mint)}
+.login .side .big .ic{width:30px;height:30px}
+.login .form{padding:36px 30px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+@media (max-width:720px){.login{grid-template-columns:minmax(0,1fr)}.login .side{padding:26px 22px}.login .form{padding:26px 22px}}
+
+/* staff */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:40px minmax(0,1fr);gap:2px 12px;align-items:center}
+.tile .ico{grid-row:span 3;display:grid;place-items:center;width:40px;height:40px;border-radius:12px}
+.tile b{display:block;font:700 28px/1.15 var(--f-display);font-variant-numeric:tabular-nums}
+.tile span.s{display:block;font-size:12.5px;color:var(--ink-2)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:780px;font-size:14px}
+th{background:var(--bar-bg);color:var(--bar-ink);text-align:left;font:600 13px var(--f-display);padding:12px;white-space:nowrap}
+td{padding:11px 12px;border-top:1px solid var(--line);vertical-align:middle}
+tbody tr:hover td{background:var(--mint-soft)}
+tr.zebra td{background:var(--surface-2)}
+tr.zebra:hover td{background:var(--mint-soft)}
+td .acts{display:flex;flex-wrap:wrap;gap:6px}
+.tk{font:700 14px var(--f-display);font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.chip{flex:none;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 15px;font:600 14px var(--f-display);color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.nowcard{border:2px solid var(--accent);background:var(--surface);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+.qrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.qrow:first-child{border-top:0}
+.bar-h{height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden;min-width:90px}
+.bar-h i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--accent));border-radius:6px}
+.hours{display:flex;align-items:flex-end;gap:8px;height:160px;padding-top:10px;background:repeating-linear-gradient(to top,transparent 0,transparent 39px,var(--line) 39px,var(--line) 40px)}
+.hours div{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
+.hours i{display:block;width:100%;background:linear-gradient(180deg,var(--mint),var(--accent));border-radius:7px 7px 0 0;min-height:2px}
+.hours span{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hours em{font:600 12px var(--f-display);font-style:normal;font-variant-numeric:tabular-nums}
+.empty{text-align:center;padding:36px 16px;color:var(--ink-2)}
+.empty h3{color:var(--ink);margin-bottom:6px}
+
+/* footer, modal, toast */
+.foot{margin:56px -16px 0;background:var(--bar-bg);color:var(--bar-ink);padding:30px 16px calc(env(safe-area-inset-bottom,0px) + 22px)}
+.foot .inner{display:flex;flex-direction:column;gap:18px}
+.foot .top{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
+.foot p{color:rgba(234,246,243,.78);font-size:13.5px}
+.foot .link{background:transparent;border:1.5px solid rgba(255,255,255,.28);color:var(--bar-ink);border-radius:999px;padding:8px 16px;font:600 14px var(--f-display)}
+.foot .link:hover{background:rgba(255,255,255,.1)}
+.foot hr{border:0;border-top:1px solid rgba(255,255,255,.14);margin:0}
+.modal{position:fixed;inset:0;background:rgba(6,28,30,.66);display:grid;place-items:center;padding:16px;z-index:30}
+.sheet{background:var(--surface);border-radius:24px;width:min(640px,100%);max-height:min(88vh,760px);overflow:auto;padding:26px;display:flex;flex-direction:column;gap:16px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.sheet h3{font-size:16px;margin-bottom:2px}
+.sheet section p{font-size:14px;color:var(--ink-2)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:12px;font-weight:600;max-width:min(92vw,440px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+#toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+@media (max-width:560px){.bar-r{width:100%;margin-left:0;justify-content:space-between}}
+</style>
+
+<div class="bar-wrap">
+  <header class="bar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><circle cx="15" cy="15" r="11" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8.5 15.5h3.2l1.7-3.6 2.3 6.4 1.7-2.8h3.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 22l6 6" stroke="var(--coral)" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <span>AROGYA<i>.Q</i></span>
+    </div>
+    <div class="bar-r">
+      <label class="langpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><select id="lang" aria-label="Language"></select></label>
+      <div class="switch" role="tablist" id="roleSwitch"></div>
+    </div>
+    <div class="sync" id="sync"></div>
+  </header>
+</div>
+<div class="wrap">
+  <nav class="tabs" id="subnav" role="tablist"></nav>
+  <main id="main"></main>
+</div>
+<footer class="foot"><div class="inner" id="foot"></div></footer>
+<div id="modal" hidden></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/*CORE*/
+var DOCTORS=[
+  {id:'rao',name:'Dr. Ananya Rao',dept:'General Medicine',code:'GM',rn:4,avg:10},
+  {id:'khan',name:'Dr. Sameer Khan',dept:'Paediatrics',code:'PD',rn:7,avg:12},
+  {id:'reddy',name:'Dr. Lakshmi Reddy',dept:'Gynaecology',code:'GY',rn:9,avg:15},
+  {id:'iyer',name:'Dr. Meera Iyer',dept:'Cardiology',code:'CD',rn:12,avg:15},
+  {id:'sethi',name:'Dr. Vikram Sethi',dept:'Orthopaedics',code:'OR',rn:15,avg:12},
+  {id:'verma',name:'Dr. Rahul Verma',dept:'Dermatology',code:'DM',rn:18,avg:8}
+];
+var SESSIONS=[[540,780],[840,1020]]; /* 9:00-13:00 and 14:00-17:00, in minutes */
+var SLOT=15;
+var ACTIVE=['booked','checked_in','in_consult','done'];
+function pad(n){return String(n).padStart(2,'0')}
+function pad3(n){return String(n).padStart(3,'0')}
+function dstr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function docOf(id){return DOCTORS.find(function(d){return d.id===id})||DOCTORS[0]}
+function slotsOf(){var out=[];SESSIONS.forEach(function(s){for(var m=s[0];m<s[1];m+=SLOT)out.push(pad(Math.floor(m/60))+':'+pad(m%60))});return out}
+function toMin(s){var p=s.split(':');return +p[0]*60+ +p[1]}
+function tsOf(date,slot){var d=date.split('-').map(Number),t=slot.split(':').map(Number);return new Date(d[0],d[1]-1,d[2],t[0],t[1],0,0).getTime()}
+function fmt12(slot){var p=slot.split(':').map(Number),h=p[0],ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+pad(p[1])+' '+ap}
+function isActive(a){return ACTIVE.indexOf(a.status)>=0}
+function slotTaken(appts,doctorId,date,slot,exceptId){
+  for(var a of appts.values()){
+    if(a.id!==exceptId&&a.doctorId===doctorId&&a.date===date&&a.slot===slot&&!a.walkin&&isActive(a))return true;
+  }
+  return false;
+}
+function dayList(appts,doctorId,date){return Array.from(appts.values()).filter(function(a){return a.doctorId===doctorId&&a.date===date})}
+/* A late arrival queues from the moment they check in, an early one from their slot. */
+function effTs(a){var s=a.slot?tsOf(a.date,a.slot):0;return Math.max(s,a.checkedInAt||0)}
+function cmpQueue(x,y){
+  if(!!x.emergency!==!!y.emergency)return x.emergency?-1:1;
+  if(x.emergency&&y.emergency)return (x.emergencyAt||0)-(y.emergencyAt||0)||x.id.localeCompare(y.id);
+  return effTs(x)-effTs(y)||(x.checkedInAt||0)-(y.checkedInAt||0)||x.id.localeCompare(y.id);
+}
+function queueOf(appts,doctorId,date){
+  var list=dayList(appts,doctorId,date);
+  return {
+    list:list,
+    waiting:list.filter(function(a){return a.status==='checked_in'}).sort(cmpQueue),
+    serving:list.find(function(a){return a.status==='in_consult'})||null
+  };
+}
+/* Token numbers follow arrival order for that doctor and day, so nothing needs a shared counter. */
+function tokenOf(appts,a){
+  if(!a||!a.checkedInAt)return null;
+  var doc=docOf(a.doctorId);
+  var arrived=dayList(appts,a.doctorId,a.date).filter(function(x){return x.checkedInAt}).sort(function(x,y){return x.checkedInAt-y.checkedInAt||x.id.localeCompare(y.id)});
+  var i=arrived.findIndex(function(x){return x.id===a.id});
+  return doc.code+'-'+pad3(i+1);
+}
+function waitInfo(appts,a){
+  var q=queueOf(appts,a.doctorId,a.date),doc=docOf(a.doctorId);
+  var idx=q.waiting.findIndex(function(x){return x.id===a.id});
+  if(idx<0)return null;
+  var mins=Math.round((idx+(q.serving?0.5:0))*doc.avg/5)*5;
+  return {ahead:idx,mins:mins,serving:q.serving,next:idx===0&&!q.serving};
+}
+function clinicElapsed(date,nowTs){
+  var today=dstr(new Date(nowTs));
+  var full=SESSIONS.reduce(function(s,x){return s+(x[1]-x[0])},0);
+  if(date<today)return full;
+  if(date>today)return 0;
+  var d=new Date(nowTs),nm=d.getHours()*60+d.getMinutes();
+  return SESSIONS.reduce(function(s,x){return s+Math.max(0,Math.min(nm,x[1])-x[0])},0);
+}
+function mean(a){return a.length?a.reduce(function(s,x){return s+x},0)/a.length:null}
+function statsFor(appts,date,nowTs){
+  var list=Array.from(appts.values()).filter(function(a){return a.date===date&&a.status!=='cancelled'});
+  var done=list.filter(function(a){return a.status==='done'}).length;
+  var noShow=list.filter(function(a){return a.status==='no_show'}).length;
+  var elapsed=clinicElapsed(date,nowTs);
+  var perDoc=DOCTORS.map(function(d){
+    var l=list.filter(function(a){return a.doctorId===d.id});
+    var care=l.filter(function(a){return a.calledAt}).reduce(function(s,a){return s+((a.doneAt||nowTs)-a.calledAt)/60000},0);
+    var w=l.filter(function(a){return a.checkedInAt&&a.calledAt}).map(function(a){return (a.calledAt-a.checkedInAt)/60000});
+    return {doctor:d,total:l.length,
+      seen:l.filter(function(a){return a.status==='done'}).length,
+      waiting:l.filter(function(a){return a.status==='checked_in'}).length,
+      avgWait:mean(w),util:elapsed?Math.min(1,care/elapsed):null};
+  });
+  var withUtil=perDoc.filter(function(p){return p.total>0&&p.util!=null}).map(function(p){return p.util});
+  var rated=list.filter(function(a){return a.rating});
+  var ev=[];
+  list.forEach(function(a){
+    if(a.checkedInAt){
+      var end=a.calledAt||(a.status==='checked_in'?nowTs:a.checkedInAt);
+      ev.push([a.checkedInAt,1]);ev.push([end,-1]);
+    }
+  });
+  ev.sort(function(x,y){return x[0]-y[0]||x[1]-y[1]});
+  var cur=0,peak=0;ev.forEach(function(e){cur+=e[1];if(cur>peak)peak=cur});
+  var hours={};
+  list.forEach(function(a){if(a.checkedInAt){var h=new Date(a.checkedInAt).getHours();hours[h]=(hours[h]||0)+1}});
+  return {
+    total:list.length,done:done,noShow:noShow,
+    noShowRate:(done+noShow)?noShow/(done+noShow):null,
+    avgWait:mean(list.filter(function(a){return a.checkedInAt&&a.calledAt}).map(function(a){return (a.calledAt-a.checkedInAt)/60000})),
+    util:mean(withUtil),sat:mean(rated.map(function(a){return a.rating})),ratedN:rated.length,
+    peak:peak,waitingNow:list.filter(function(a){return a.status==='checked_in'}).length,
+    perDoc:perDoc,hours:hours
+  };
+}
+function makeSample(nowTs){
+  var date=dstr(new Date(nowTs)),slots=slotsOf(),d0=new Date(nowTs),nowMin=d0.getHours()*60+d0.getMinutes();
+  var base=Math.min(Math.max(nowMin,570),990),used={},out=[];
+  var names=['Aarav Menon','Diya Sharma','Rohan Patil','Isha Nair','Kabir Singh','Meera Joshi','Arjun Das','Sana Fatima','Vihaan Gupta','Tara Pillai','Nikhil Rao','Anika Bose','Dev Kulkarni','Riya Chawla','Imran Sheikh','Leela Menon','Karan Bhatt','Nandini Rao','Yash Thakur','Pooja Iyer','Farah Ali'];
+  var spec=[
+    {d:'rao',off:-60,st:'done',cin:80,call:65,dn:52,rt:5,why:'Fever and cough'},
+    {d:'rao',off:-45,st:'done',cin:55,call:50,dn:38,rt:4,why:'Follow-up visit'},
+    {d:'rao',off:-30,st:'in_consult',cin:35,call:9,why:'Back pain'},
+    {d:'rao',off:-15,st:'checked_in',cin:22,why:'Headache'},
+    {d:'rao',off:0,st:'checked_in',cin:12,why:'Routine check-up'},
+    {d:'rao',off:15,st:'booked',why:'Cold and sore throat'},
+    {d:'rao',off:30,st:'booked',why:'Blood pressure review'},
+    {d:'rao',off:-75,st:'no_show',why:'Follow-up visit'},
+    {d:'rao',off:60,st:'cancelled',why:'Fever'},
+    {d:'rao',off:0,st:'checked_in',cin:3,why:'Severe chest pain',emerg:true},
+    {d:'khan',off:-30,st:'done',cin:50,call:41,dn:28,rt:5,why:'Vaccination'},
+    {d:'khan',off:0,st:'checked_in',cin:14,why:'Cough in a 4-year-old'},
+    {d:'khan',off:15,st:'booked',why:'Growth check'},
+    {d:'iyer',off:-45,st:'done',cin:70,call:48,dn:30,rt:4,why:'ECG review'},
+    {d:'iyer',off:-15,st:'in_consult',cin:40,call:12,why:'Chest discomfort'},
+    {d:'iyer',off:0,st:'checked_in',cin:18,why:'Follow-up after stent'},
+    {d:'iyer',off:30,st:'booked',why:'Blood pressure review'},
+    {d:'sethi',off:-15,st:'checked_in',cin:25,why:'Knee pain'},
+    {d:'sethi',off:30,st:'booked',why:'Fracture follow-up'},
+    {d:'reddy',off:0,st:'booked',why:'Antenatal check-up'},
+    {d:'verma',off:15,st:'booked',why:'Skin rash'}
+  ];
+  function ago(m){return nowTs-m*60000}
+  spec.forEach(function(r,i){
+    var target=base+r.off,idx=0,best=1e9;
+    slots.forEach(function(s,k){var dd=Math.abs(toMin(s)-target);if(dd<best){best=dd;idx=k}});
+    var k=idx;
+    if(!r.emerg){
+      while(used[r.d+slots[k]]&&k<slots.length-1)k++;
+      while(used[r.d+slots[k]]&&k>0)k--;
+      used[r.d+slots[k]]=true;
+    }
+    var a={
+      id:'AQ-S'+String(i+1).padStart(4,'0'),uid:null,name:names[i%names.length],phone:'90000000'+pad(i+1),
+      age:r.d==='khan'?3+(i%6):24+((i*7)%50),reason:r.why,doctorId:r.d,date:date,slot:slots[k],channel:i%2?'sms':'whatsapp',
+      status:r.st,emergency:!!r.emerg,emergencyAt:r.emerg?ago(r.cin):null,walkin:!!r.emerg,
+      createdAt:ago(600+i),checkedInAt:null,calledAt:null,doneAt:null,rating:null,sample:true
+    };
+    if(r.cin!=null)a.checkedInAt=ago(r.cin);
+    if(r.call!=null)a.calledAt=ago(r.call);
+    if(r.dn!=null)a.doneAt=ago(r.dn);
+    if(r.rt)a.rating=r.rt;
+    out.push(a);
+  });
+  return out;
+}
+/*ENDCORE*/
+
+/* ---------- languages: each row is [English, Hindi, Telugu, Tamil] ---------- */
+var LANGS=['en','hi','te','ta'];
+var LANG_NAME={en:'English',hi:'हिन्दी',te:'తెలుగు',ta:'தமிழ்'};
+var LOC={en:'en-IN',hi:'hi-IN',te:'te-IN',ta:'ta-IN'};
+var D={
+'tab.book':['Book a visit','अपॉइंटमेंट बुक करें','అపాయింట్‌మెంట్ బుక్ చేయండి','முன்பதிவு'],
+'tab.visit':['My visit','मेरी विज़िट','నా సందర్శన','என் வருகை'],
+'tab.board':['Live queue','लाइव कतार','లైవ్ క్యూ','நேரலை வரிசை'],
+'role.patient':['Patient','मरीज़','రోగి','நோயாளி'],
+'role.staff':['Hospital staff','अस्पताल कर्मचारी','ఆసుపత్రి సిబ్బంది','மருத்துவமனை பணியாளர்'],
+'sync.connecting':['Connecting…','जुड़ रहा है…','కనెక్ట్ అవుతోంది…','இணைக்கிறது…'],
+'sync.live':['Live, shared with all devices','लाइव, सभी डिवाइस के साथ साझा','లైవ్, అన్ని పరికరాలతో షేర్ అవుతోంది','நேரலை, எல்லா சாதனங்களுடனும் பகிரப்படுகிறது'],
+'sync.demo':['Demo mode, data stays on this page','डेमो मोड, डेटा इसी पेज पर रहता है','డెమో మోడ్, డేటా ఈ పేజీలోనే ఉంటుంది','டெமோ முறை, தரவு இந்தப் பக்கத்தில் மட்டுமே இருக்கும்'],
+'lang.label':['Language','भाषा','భాష','மொழி'],
+'today':['Today','आज','ఈరోజు','இன்று'],
+'tomorrow':['Tomorrow','कल','రేపు','நாளை'],
+'hero.eyebrow':['Health care and wellbeing','स्वास्थ्य सेवा और कल्याण','ఆరోగ్య సంరక్షణ మరియు శ్రేయస్సు','சுகாதாரமும் நலமும்'],
+'hero.title':['Book online. Skip the waiting room.','ऑनलाइन बुक करें। इंतज़ार से बचें।','ఆన్‌లైన్‌లో బుక్ చేయండి. వెయిటింగ్ రూమ్‌లో వేచి ఉండకండి.','ஆன்லைனில் முன்பதிவு செய்யுங்கள். காத்திருப்பைத் தவிர்க்கவும்.'],
+'hero.sub':['Pick a doctor and a time, get a live queue token when you arrive, and wait wherever you are comfortable.','डॉक्टर और समय चुनें, पहुँचने पर लाइव कतार टोकन पाएँ, और जहाँ सुविधा हो वहाँ इंतज़ार करें।','డాక్టర్‌ని, సమయాన్ని ఎంచుకోండి, వచ్చిన తర్వాత లైవ్ క్యూ టోకెన్ పొందండి, మీకు సౌకర్యంగా ఉన్న చోట వేచి ఉండండి.','மருத்துவரையும் நேரத்தையும் தேர்வு செய்யுங்கள், வந்ததும் நேரலை வரிசை டோக்கன் பெறுங்கள், வசதியான இடத்தில் காத்திருங்கள்.'],
+'hero.b1':['Shorter waits','कम इंतज़ार','తక్కువ నిరీక్షణ','குறைந்த காத்திருப்பு'],
+'hero.b2':['Live queue token','लाइव कतार टोकन','లైవ్ క్యూ టోకెన్','நேரலை வரிசை டோக்கன்'],
+'hero.b3':['Reminders','रिमाइंडर','రిమైండర్లు','நினைவூட்டல்கள்'],
+'book.s1':['Choose a doctor','डॉक्टर चुनें','డాక్టర్‌ని ఎంచుకోండి','மருத்துவரைத் தேர்வு செய்யுங்கள்'],
+'book.s1r':['Doctor','डॉक्टर','డాక్టర్','மருத்துவர்'],
+'book.nextfree':['Next free: {when}, {time}','अगला खाली समय: {when}, {time}','తర్వాతి ఖాళీ: {when}, {time}','அடுத்த காலி நேரம்: {when}, {time}'],
+'book.noslots':['No slots this week','इस हफ़्ते कोई स्लॉट नहीं','ఈ వారం స్లాట్లు లేవు','இந்த வாரம் நேரங்கள் இல்லை'],
+'book.s2':['Pick a day and time','दिन और समय चुनें','రోజు మరియు సమయాన్ని ఎంచుకోండి','நாளையும் நேரத்தையும் தேர்வு செய்யுங்கள்'],
+'book.morning':['Morning, 9:00 to 1:00','सुबह, 9:00 से 1:00','ఉదయం, 9:00 నుండి 1:00 వరకు','காலை, 9:00 முதல் 1:00 வரை'],
+'book.afternoon':['Afternoon, 2:00 to 5:00','दोपहर, 2:00 से 5:00','మధ్యాహ్నం, 2:00 నుండి 5:00 వరకు','மதியம், 2:00 முதல் 5:00 வரை'],
+'book.noday':['No free slots on this day. Try another day.','इस दिन कोई स्लॉट खाली नहीं है। कोई और दिन चुनें।','ఈ రోజు ఖాళీ స్లాట్లు లేవు. మరో రోజు ప్రయత్నించండి.','இந்த நாளில் காலி நேரங்கள் இல்லை. வேறு நாளைத் தேர்வு செய்யுங்கள்.'],
+'book.s3':['Your details','आपकी जानकारी','మీ వివరాలు','உங்கள் விவரங்கள்'],
+'f.name':['Patient name','मरीज़ का नाम','రోగి పేరు','நோயாளியின் பெயர்'],
+'f.phone':['Mobile number','मोबाइल नंबर','మొబైల్ నంబర్','மொபைல் எண்'],
+'f.phoneph':['10 digits','10 अंक','10 అంకెలు','10 இலக்கங்கள்'],
+'f.age':['Age (optional)','उम्र (वैकल्पिक)','వయస్సు (ఐచ్ఛికం)','வயது (விருப்பம்)'],
+'f.reason':['Reason for visit (optional)','आने का कारण (वैकल्पिक)','సందర్శన కారణం (ఐచ్ఛికం)','வருகைக்கான காரணம் (விருப்பம்)'],
+'f.reasonph':['Fever, follow-up, check-up','बुखार, फॉलो-अप, चेक-अप','జ్వరం, ఫాలో-అప్, చెకప్','காய்ச்சல், தொடர் சிகிச்சை, பரிசோதனை'],
+'f.remind':['Send reminders by','रिमाइंडर भेजें','రిమైండర్లు పంపండి','நினைவூட்டல் அனுப்பும் வழி'],
+'ch.wa':['WhatsApp','व्हाट्सऐप','వాట్సాప్','வாட்ஸ்அப்'],
+'ch.sms':['SMS','एसएमएस','SMS','SMS'],
+'book.yourslot':['Your slot','आपका स्लॉट','మీ స్లాట్','உங்கள் நேரம்'],
+'book.pick':['Pick a time to continue','आगे बढ़ने के लिए समय चुनें','కొనసాగడానికి సమయాన్ని ఎంచుకోండి','தொடர ஒரு நேரத்தைத் தேர்வு செய்யுங்கள்'],
+'book.confirm':['Confirm booking','बुकिंग पक्की करें','బుకింగ్ నిర్ధారించండి','முன்பதிவை உறுதி செய்யுங்கள்'],
+'book.saving':['Saving…','सहेज रहा है…','సేవ్ అవుతోంది…','சேமிக்கிறது…'],
+'book.move':['Move my booking','मेरी बुकिंग बदलें','నా బుకింగ్‌ని మార్చండి','என் முன்பதிவை மாற்றுங்கள்'],
+'book.keeporig':['Keep the original time','पुराना समय रखें','అసలు సమయాన్నే ఉంచండి','முந்தைய நேரத்தையே வைத்திருங்கள்'],
+'book.changing':['Changing the time for {id}.','{id} का समय बदल रहे हैं।','{id} సమయాన్ని మారుస్తున్నారు.','{id} நேரத்தை மாற்றுகிறீர்கள்.'],
+'book.changingsub':['{doc} stays the same. Pick a new day and time.','{doc} वही रहेंगे। नया दिन और समय चुनें।','{doc} అలాగే ఉంటారు. కొత్త రోజు మరియు సమయాన్ని ఎంచుకోండి.','{doc} மாறமாட்டார். புதிய நாளையும் நேரத்தையும் தேர்வு செய்யுங்கள்.'],
+'book.readonly':['You have view-only access, so bookings cannot be saved.','आपके पास केवल देखने की अनुमति है, इसलिए बुकिंग सहेजी नहीं जा सकती।','మీకు చూడటానికి మాత్రమే అనుమతి ఉంది, కాబట్టి బుకింగ్‌లు సేవ్ కావు.','உங்களுக்குப் பார்க்க மட்டுமே அனுமதி உள்ளது, எனவே முன்பதிவுகளைச் சேமிக்க முடியாது.'],
+'after.title':['After you book','बुक करने के बाद','బుక్ చేసిన తర్వాత','முன்பதிவுக்குப் பிறகு'],
+'after.1':['You get a booking ID and a code to show at the front desk.','आपको बुकिंग आईडी और फ्रंट डेस्क पर दिखाने के लिए एक कोड मिलेगा।','మీకు బుకింగ్ ID, ఫ్రంట్ డెస్క్ వద్ద చూపించడానికి ఒక కోడ్ వస్తాయి.','உங்களுக்கு முன்பதிவு ஐடியும், வரவேற்பறையில் காட்ட ஒரு குறியீடும் கிடைக்கும்.'],
+'after.2':['Your reminder choice is saved with the booking.','आपकी रिमाइंडर पसंद बुकिंग के साथ सहेजी जाती है।','మీ రిమైండర్ ఎంపిక బుకింగ్‌తో పాటు సేవ్ అవుతుంది.','உங்கள் நினைவூட்டல் தேர்வு முன்பதிவுடன் சேமிக்கப்படும்.'],
+'after.3':['On the day, tap Check in when you reach the hospital to get your token.','उस दिन अस्पताल पहुँचकर चेक इन दबाएँ और अपना टोकन पाएँ।','ఆ రోజు ఆసుపత్రికి చేరుకున్నాక చెక్ ఇన్ నొక్కి మీ టోకెన్ పొందండి.','அன்றைய நாளில் மருத்துவமனைக்கு வந்ததும் செக் இன் அழுத்தி டோக்கன் பெறுங்கள்.'],
+'after.4':['Follow your place in the queue on your phone and walk in when called.','अपने फ़ोन पर कतार में अपनी जगह देखें और बुलाए जाने पर अंदर जाएँ।','మీ ఫోన్‌లో క్యూలో మీ స్థానాన్ని చూడండి, పిలిచినప్పుడు లోపలికి వెళ్లండి.','உங்கள் தொலைபேசியில் வரிசையில் உங்கள் இடத்தைப் பாருங்கள், அழைக்கப்பட்டதும் உள்ளே செல்லுங்கள்.'],
+'err.name':["Enter the patient's full name.",'मरीज़ का पूरा नाम लिखें।','రోగి పూర్తి పేరు నమోదు చేయండి.','நோயாளியின் முழுப் பெயரை உள்ளிடுங்கள்.'],
+'err.phone':['Enter a 10-digit mobile number.','10 अंकों का मोबाइल नंबर लिखें।','10 అంకెల మొబైల్ నంబర్ నమోదు చేయండి.','10 இலக்க மொபைல் எண்ணை உள்ளிடுங்கள்.'],
+'err.slot':['Pick a time slot.','समय स्लॉट चुनें।','సమయ స్లాట్‌ని ఎంచుకోండి.','ஒரு நேரத்தைத் தேர்வு செய்யுங்கள்.'],
+'err.taken':['That time was just taken. Pick another slot.','वह समय अभी-अभी बुक हो गया। कोई और स्लॉट चुनें।','ఆ సమయం ఇప్పుడే బుక్ అయింది. మరో స్లాట్‌ని ఎంచుకోండి.','அந்த நேரம் இப்போதுதான் பதிவாகிவிட்டது. வேறு நேரத்தைத் தேர்வு செய்யுங்கள்.'],
+'err.save':['Could not save the booking. Try again.','बुकिंग सहेजी नहीं जा सकी। फिर कोशिश करें।','బుకింగ్ సేవ్ కాలేదు. మళ్లీ ప్రయత్నించండి.','முன்பதிவைச் சேமிக்க முடியவில்லை. மீண்டும் முயலுங்கள்.'],
+'err.move':['Could not move the booking. Try again.','बुकिंग बदली नहीं जा सकी। फिर कोशिश करें।','బుకింగ్‌ని మార్చలేకపోయాం. మళ్లీ ప్రయత్నించండి.','முன்பதிவை மாற்ற முடியவில்லை. மீண்டும் முயலுங்கள்.'],
+'err.view':['You have view-only access, so this change was not saved.','आपके पास केवल देखने की अनुमति है, इसलिए यह बदलाव सहेजा नहीं गया।','మీకు చూడటానికి మాత్రమే అనుమతి ఉంది, కాబట్టి ఈ మార్పు సేవ్ కాలేదు.','உங்களுக்குப் பார்க்க மட்டுமே அனுமதி உள்ளது, எனவே இந்த மாற்றம் சேமிக்கப்படவில்லை.'],
+'err.conn':['Could not save. Check your connection and try again.','सहेजा नहीं जा सका। अपना कनेक्शन जाँचें और फिर कोशिश करें।','సేవ్ కాలేదు. మీ కనెక్షన్‌ని చూసి మళ్లీ ప్రయత్నించండి.','சேமிக்க முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயலுங்கள்.'],
+'toast.moved':['Booking moved to {when}.','बुकिंग {when} पर बदल दी गई।','బుకింగ్ {when}కి మార్చబడింది.','முன்பதிவு {when} அன்றுக்கு மாற்றப்பட்டது.'],
+'toast.checked':['You are checked in.','आपका चेक इन हो गया।','మీ చెక్ ఇన్ పూర్తయింది.','நீங்கள் செக் இன் செய்யப்பட்டீர்கள்.'],
+'toast.thanks':['Thank you for the feedback.','आपकी प्रतिक्रिया के लिए धन्यवाद।','మీ అభిప్రాయానికి ధన్యవాదాలు.','உங்கள் கருத்துக்கு நன்றி.'],
+'visit.e.t':['No visits yet','अभी कोई विज़िट नहीं','ఇంకా సందర్శనలు లేవు','இன்னும் வருகைகள் இல்லை'],
+'visit.e.b':['Book a slot and it shows up here with your queue token on the day.','स्लॉट बुक करें, वह उस दिन आपके कतार टोकन के साथ यहाँ दिखेगा।','స్లాట్ బుక్ చేస్తే, ఆ రోజున మీ క్యూ టోకెన్‌తో పాటు ఇక్కడ కనిపిస్తుంది.','நேரத்தை முன்பதிவு செய்தால், அன்றைய நாளில் உங்கள் வரிசை டோக்கனுடன் இங்கே தெரியும்.'],
+'visit.n.t':['Nothing coming up','आगे कोई विज़िट नहीं','రాబోయే సందర్శనలు లేవు','வரவிருக்கும் வருகைகள் இல்லை'],
+'visit.n.b':['Book your next visit when you need it.','ज़रूरत होने पर अगली विज़िट बुक करें।','అవసరమైనప్పుడు తదుపరి సందర్శనను బుక్ చేయండి.','தேவைப்படும்போது அடுத்த வருகையை முன்பதிவு செய்யுங்கள்.'],
+'visit.past':['Past visits','पिछली विज़िट','గత సందర్శనలు','கடந்த வருகைகள்'],
+'banner.t':['Booked. Booking ID {id}. Your visit is {when}. Reminders go by {ch}.','बुकिंग हो गई। बुकिंग आईडी {id}। आपकी विज़िट {when} है। रिमाइंडर {ch} से आएँगे।','బుక్ అయింది. బుకింగ్ ID {id}. మీ సందర్శన {when}. రిమైండర్లు {ch} ద్వారా వస్తాయి.','முன்பதிவு ஆனது. முன்பதிவு ஐடி {id}. உங்கள் வருகை {when}. நினைவூட்டல்கள் {ch} மூலம் வரும்.'],
+'dismiss':['Dismiss','बंद करें','మూసివేయండి','மூடு'],
+'step.1':['Booked','बुक हुआ','బుక్ అయింది','முன்பதிவு'],
+'step.2':['Checked in','चेक इन','చెక్ ఇన్','செக் இன்'],
+'step.3':['With doctor','डॉक्टर के साथ','డాక్టర్‌తో','மருத்துவருடன்'],
+'step.4':['Done','पूरा','పూర్తి','முடிந்தது'],
+'checkin.btn':["I'm here, check me in",'चेक इन करें','నేను వచ్చాను, చెక్ ఇన్ చేయండి','வந்துவிட்டேன், செக் இன் செய்யுங்கள்'],
+'checkin.hint':['Tap when you reach the hospital. You will get a queue token.','अस्पताल पहुँचने पर दबाएँ। आपको कतार टोकन मिलेगा।','ఆసుపత్రికి చేరుకున్నాక నొక్కండి. మీకు క్యూ టోకెన్ వస్తుంది.','மருத்துவமனைக்கு வந்ததும் அழுத்துங்கள். உங்களுக்கு வரிசை டோக்கன் கிடைக்கும்.'],
+'checkin.later':['Check-in opens on the day of your visit.','चेक इन आपकी विज़िट वाले दिन खुलता है।','చెక్ ఇన్ మీ సందర్శన రోజున తెరుచుకుంటుంది.','செக் இன் உங்கள் வருகை நாளில் திறக்கும்.'],
+'checkin.old':['This booking is from an earlier day.','यह बुकिंग पिछले दिन की है।','ఈ బుకింగ్ ఇంతకు ముందు రోజుది.','இந்த முன்பதிவு முந்தைய நாளுடையது.'],
+'qr.show':['Show code for the front desk','फ्रंट डेस्क के लिए कोड दिखाएँ','ఫ్రంట్ డెస్క్ కోసం కోడ్ చూపించండి','வரவேற்பறைக்கான குறியீட்டைக் காட்டு'],
+'qr.hide':['Hide code','कोड छिपाएँ','కోడ్ దాచండి','குறியீட்டை மறை'],
+'qr.note':['Show this code at the front desk.','यह कोड फ्रंट डेस्क पर दिखाएँ।','ఈ కోడ్‌ని ఫ్రంట్ డెస్క్ వద్ద చూపించండి.','இந்தக் குறியீட்டை வரவேற்பறையில் காட்டுங்கள்.'],
+'change':['Change time','समय बदलें','సమయం మార్చండి','நேரத்தை மாற்று'],
+'cancel':['Cancel booking','बुकिंग रद्द करें','బుకింగ్ రద్దు చేయండి','முன்பதிவை ரத்து செய்'],
+'cancel.q':['Cancel this booking?','यह बुकिंग रद्द करें?','ఈ బుకింగ్‌ని రద్దు చేయాలా?','இந்த முன்பதிவை ரத்து செய்யவா?'],
+'cancel.yes':['Yes, cancel','हाँ, रद्द करें','అవును, రద్దు చేయండి','ஆம், ரத்து செய்'],
+'cancel.no':['Keep it','रहने दें','ఉంచండి','வைத்திரு'],
+'tok.label':['Your token','आपका टोकन','మీ టోకెన్','உங்கள் டோக்கன்'],
+'tok.now':['Now serving','अभी बुलाया जा रहा है','ఇప్పుడు పిలుస్తున్నది','தற்போது அழைக்கப்படுவது'],
+'tok.ahead':['Ahead of you','आपसे आगे','మీ కంటే ముందు','உங்களுக்கு முன்'],
+'tok.est':['Estimated wait','अनुमानित इंतज़ार','అంచనా నిరీక్షణ','மதிப்பிடப்பட்ட காத்திருப்பு'],
+'tok.next':["You're next",'अगला नंबर आपका है','తర్వాతి వారు మీరే','அடுத்தது நீங்கள்'],
+'tok.min':['~{n} min','~{n} मिनट','~{n} నిమిషాలు','~{n} நிமிடம்'],
+'tok.hint':['You can wait anywhere comfortable nearby. This page updates as the queue moves.','आप पास में किसी भी आरामदायक जगह इंतज़ार कर सकते हैं। कतार बढ़ने पर यह पेज अपने आप अपडेट होता है।','మీరు దగ్గరలో ఎక్కడైనా సౌకర్యంగా వేచి ఉండవచ్చు. క్యూ కదిలినప్పుడు ఈ పేజీ అప్‌డేట్ అవుతుంది.','அருகில் வசதியான எந்த இடத்திலும் காத்திருக்கலாம். வரிசை நகரும்போது இந்தப் பக்கம் புதுப்பிக்கப்படும்.'],
+'tok.priority':['Priority case. You will be seen first.','प्राथमिकता वाला मामला। आपको सबसे पहले देखा जाएगा।','ప్రాధాన్యత కేసు. మిమ్మల్ని ముందుగా చూస్తారు.','முன்னுரிமை நிலை. உங்களை முதலில் பார்ப்பார்கள்.'],
+'turn':["It's your turn. Please go to {room} for {doc}.",'आपकी बारी है। कृपया {doc} के लिए {room} में जाएँ।','మీ వంతు వచ్చింది. దయచేసి {doc} కోసం {room}కి వెళ్లండి.','உங்கள் முறை. {doc}ஐப் பார்க்க {room}க்குச் செல்லுங்கள்.'],
+'rate.q':['How was your visit?','आपकी विज़िट कैसी रही?','మీ సందర్శన ఎలా ఉంది?','உங்கள் வருகை எப்படி இருந்தது?'],
+'rate.thanks':['Thanks for rating your visit.','विज़िट को रेट करने के लिए धन्यवाद।','మీ సందర్శనకు రేటింగ్ ఇచ్చినందుకు ధన్యవాదాలు.','உங்கள் வருகைக்கு மதிப்பீடு அளித்ததற்கு நன்றி.'],
+'noshow.note':['This visit was marked as missed. You can book a new slot any time.','यह विज़िट छूटी हुई मानी गई है। आप कभी भी नया स्लॉट बुक कर सकते हैं।','ఈ సందర్శన మిస్ అయినట్లు గుర్తించబడింది. మీరు ఎప్పుడైనా కొత్త స్లాట్ బుక్ చేయవచ్చు.','இந்த வருகை தவறவிடப்பட்டதாகக் குறிக்கப்பட்டது. எப்போது வேண்டுமானாலும் புதிய நேரத்தை முன்பதிவு செய்யலாம்.'],
+'id':['ID {id}','आईडी {id}','ID {id}','ஐடி {id}'],
+'room':['Room {n}','कमरा {n}','గది {n}','அறை {n}'],
+'lookup.t':['Find a booking','बुकिंग खोजें','బుకింగ్‌ని వెతకండి','முன்பதிவைத் தேடுங்கள்'],
+'lookup.s':['Booked on another device or for a family member? Enter the booking ID or the mobile number used.','किसी दूसरे डिवाइस पर या परिवार के सदस्य के लिए बुक किया? बुकिंग आईडी या इस्तेमाल किया गया मोबाइल नंबर लिखें।','మరో పరికరంలో లేదా కుటుంబ సభ్యుల కోసం బుక్ చేశారా? బుకింగ్ ID లేదా ఉపయోగించిన మొబైల్ నంబర్ నమోదు చేయండి.','வேறொரு சாதனத்தில் அல்லது குடும்ப உறுப்பினருக்காக முன்பதிவு செய்தீர்களா? முன்பதிவு ஐடி அல்லது பயன்படுத்திய மொபைல் எண்ணை உள்ளிடுங்கள்.'],
+'lookup.ph':['AQ-XXXXX or mobile number','AQ-XXXXX या मोबाइल नंबर','AQ-XXXXX లేదా మొబైల్ నంబర్','AQ-XXXXX அல்லது மொபைல் எண்'],
+'lookup.btn':['Find','खोजें','వెతుకు','தேடு'],
+'lookup.ok':['Found it. Your visits are listed above.','मिल गई। आपकी विज़िट ऊपर दिखाई गई हैं।','దొరికింది. మీ సందర్శనలు పైన ఉన్నాయి.','கிடைத்தது. உங்கள் வருகைகள் மேலே உள்ளன.'],
+'lookup.no':['No booking found for that ID or mobile number. {n} tries left.','इस आईडी या मोबाइल नंबर की कोई बुकिंग नहीं मिली। {n} कोशिशें बाकी हैं।','ఆ ID లేదా మొబైల్ నంబర్‌కి బుకింగ్ దొరకలేదు. {n} ప్రయత్నాలు మిగిలి ఉన్నాయి.','அந்த ஐடி அல்லது மொபைல் எண்ணுக்கு முன்பதிவு எதுவும் இல்லை. {n} முயற்சிகள் மீதமுள்ளன.'],
+'lookup.lock':['Too many tries. Search is locked for {m}:{s}.','बहुत ज़्यादा कोशिशें। खोज {m}:{s} के लिए बंद है।','చాలా ప్రయత్నాలు. శోధన {m}:{s} వరకు లాక్ అయింది.','அதிக முயற்சிகள். தேடல் {m}:{s} நேரத்திற்குப் பூட்டப்பட்டுள்ளது.'],
+'board.s':["Today's tokens by doctor. Names are never shown here.",'आज के टोकन, डॉक्टर के अनुसार। यहाँ नाम कभी नहीं दिखाए जाते।','ఈ రోజు టోకెన్లు, డాక్టర్ వారీగా. ఇక్కడ పేర్లు ఎప్పటికీ చూపబడవు.','இன்றைய டோக்கன்கள், மருத்துவர் வாரியாக. பெயர்கள் இங்கே காட்டப்படுவதில்லை.'],
+'board.w':['{n} waiting','{n} इंतज़ार में','{n} మంది వేచి ఉన్నారు','{n} பேர் காத்திருக்கின்றனர்'],
+'board.e':['~{n} min for a new arrival','नए आने वाले के लिए ~{n} मिनट','కొత్తగా వచ్చేవారికి ~{n} నిమిషాలు','புதிதாக வருபவருக்கு ~{n} நிமிடம்'],
+'board.none':['No wait right now','अभी कोई इंतज़ार नहीं','ప్రస్తుతం నిరీక్షణ లేదు','இப்போது காத்திருப்பு இல்லை'],
+'board.mine':['You are in this queue','आप इस कतार में हैं','మీరు ఈ క్యూలో ఉన్నారు','நீங்கள் இந்த வரிசையில் உள்ளீர்கள்'],
+'dept.GM':['General Medicine','सामान्य चिकित्सा','జనరల్ మెడిసిన్','பொது மருத்துவம்'],
+'dept.PD':['Paediatrics','बाल रोग','పిల్లల వైద్యం','குழந்தை மருத்துவம்'],
+'dept.GY':['Gynaecology','स्त्री रोग','స్త్రీ వైద్యం','மகளிர் மருத்துவம்'],
+'dept.CD':['Cardiology','हृदय रोग','గుండె వైద్యం','இதய மருத்துவம்'],
+'dept.OR':['Orthopaedics','हड्डी रोग','ఎముకల వైద్యం','எலும்பு மருத்துவம்'],
+'dept.DM':['Dermatology','त्वचा रोग','చర్మ వైద్యం','தோல் மருத்துவம்'],
+'st.booked':['Booked','बुक हुआ','బుక్ అయింది','முன்பதிவு'],
+'st.checked_in':['Waiting','इंतज़ार में','వేచి ఉన్నారు','காத்திருப்பு'],
+'st.in_consult':['With doctor','डॉक्टर के साथ','డాక్టర్‌తో','மருத்துவருடன்'],
+'st.done':['Done','पूरा','పూర్తి','முடிந்தது'],
+'st.cancelled':['Cancelled','रद्द','రద్దు','ரத்து'],
+'st.no_show':['No-show','नहीं आए','రాలేదు','வரவில்லை'],
+'pill.emerg':['Emergency','आपातकाल','అత్యవసరం','அவசரம்'],
+'login.t':['Staff sign-in','स्टाफ साइन-इन','సిబ్బంది సైన్-ఇన్','பணியாளர் உள்நுழைவு'],
+'login.s':['For hospital staff only. Patients do not need to sign in.','केवल अस्पताल कर्मचारियों के लिए। मरीज़ों को साइन-इन की ज़रूरत नहीं है।','ఆసుపత్రి సిబ్బందికి మాత్రమే. రోగులు సైన్-ఇన్ చేయాల్సిన అవసరం లేదు.','மருத்துவமனை பணியாளர்களுக்கு மட்டும். நோயாளிகள் உள்நுழைய வேண்டியதில்லை.'],
+'login.id':['Staff ID','स्टाफ आईडी','సిబ్బంది ID','பணியாளர் ஐடி'],
+'login.pin':['PIN','पिन','PIN','PIN'],
+'login.btn':['Sign in','साइन इन करें','సైన్ ఇన్ చేయండి','உள்நுழைக'],
+'login.bad':['Wrong staff ID or PIN. {n} tries left.','स्टाफ आईडी या पिन गलत है। {n} कोशिशें बाकी हैं।','సిబ్బంది ID లేదా PIN తప్పు. {n} ప్రయత్నాలు మిగిలి ఉన్నాయి.','பணியாளர் ஐடி அல்லது PIN தவறு. {n} முயற்சிகள் மீதமுள்ளன.'],
+'login.lock':['Too many wrong attempts. Sign-in is locked for {m}:{s}.','बहुत ज़्यादा गलत कोशिशें। साइन-इन {m}:{s} के लिए बंद है।','చాలా తప్పు ప్రయత్నాలు. సైన్-ఇన్ {m}:{s} వరకు లాక్ అయింది.','அதிக தவறான முயற்சிகள். உள்நுழைவு {m}:{s} நேரத்திற்குப் பூட்டப்பட்டுள்ளது.'],
+'login.rule':['Sign-in locks for {min} minutes after {max} wrong attempts.','{max} गलत कोशिशों के बाद साइन-इन {min} मिनट के लिए बंद हो जाता है।','{max} తప్పు ప్రయత్నాల తర్వాత సైన్-ఇన్ {min} నిమిషాల పాటు లాక్ అవుతుంది.','{max} தவறான முயற்சிகளுக்குப் பிறகு உள்நுழைவு {min} நிமிடங்கள் பூட்டப்படும்.'],
+'login.h':['Patient data stays protected','मरीज़ों का डेटा सुरक्षित रहता है','రోగి డేటా సురక్షితంగా ఉంటుంది','நோயாளி தரவு பாதுகாக்கப்படுகிறது'],
+'login.hb':['Staff tools show patient names and phone numbers, so they open only after sign-in.','स्टाफ टूल में मरीज़ों के नाम और फ़ोन नंबर दिखते हैं, इसलिए वे साइन-इन के बाद ही खुलते हैं।','సిబ్బంది సాధనాల్లో రోగుల పేర్లు, ఫోన్ నంబర్లు కనిపిస్తాయి, కాబట్టి అవి సైన్-ఇన్ తర్వాతే తెరుచుకుంటాయి.','பணியாளர் கருவிகளில் நோயாளிகளின் பெயர்கள், தொலைபேசி எண்கள் தெரியும், அதனால் உள்நுழைந்த பின்பே திறக்கும்.'],
+'signout':['Sign out','साइन आउट','సైన్ అవుట్','வெளியேறு'],
+'signedin':['Signed in as {id}','{id} के रूप में साइन इन','{id}గా సైన్ ఇన్ అయ్యారు','{id} ஆக உள்நுழைந்துள்ளீர்கள்'],
+'plogin.t':['Patient sign-in','मरीज़ साइन-इन','రోగి సైన్-ఇన్','நோயாளி உள்நுழைவு'],
+'plogin.s':['Sign in with your mobile number to book visits and follow your queue.','अपॉइंटमेंट बुक करने और कतार देखने के लिए अपने मोबाइल नंबर से साइन इन करें।','అపాయింట్‌మెంట్లు బుక్ చేయడానికి, క్యూను చూడటానికి మీ మొబైల్ నంబర్‌తో సైన్ ఇన్ చేయండి.','முன்பதிவு செய்யவும் வரிசையைப் பார்க்கவும் உங்கள் மொபைல் எண்ணுடன் உள்நுழையுங்கள்.'],
+'plogin.fill':['Fill in the code','कोड भरें','కోడ్ నింపండి','குறியீட்டை நிரப்பு'],
+'plogin.hint':['Demo account: mobile 1234567890, code 1234.','डेमो खाता: मोबाइल 1234567890, कोड 1234।','డెమో ఖాతా: మొబైల్ 1234567890, కోడ్ 1234.','டெமோ கணக்கு: மொபைல் 1234567890, குறியீடு 1234.'],
+'plogin.enter':['Enter code','कोड दर्ज करें','కోడ్ నమోదు చేయండి','குறியீட்டை உள்ளிடுங்கள்'],
+'plogin.send':['Send code','कोड भेजें','కోడ్ పంపండి','குறியீட்டை அனுப்பு'],
+'plogin.code':['4-digit code','4 अंकों का कोड','4 అంకెల కోడ్','4 இலக்கக் குறியீடு'],
+'plogin.verify':['Verify and sign in','जाँचें और साइन इन करें','ధృవీకరించి సైన్ ఇన్ చేయండి','சரிபார்த்து உள்நுழைக'],
+'plogin.sent':['Code sent to {p}. It works for {m} minutes.','कोड {p} पर भेजा गया। यह {m} मिनट तक मान्य है।','కోడ్ {p}కి పంపబడింది. ఇది {m} నిమిషాలు పని చేస్తుంది.','குறியீடு {p} எண்ணுக்கு அனுப்பப்பட்டது. இது {m} நிமிடங்கள் செல்லும்.'],
+'plogin.demo':['Demo mode: no SMS is sent. Your code is shown here instead.','डेमो मोड: कोई SMS नहीं भेजा जाता। आपका कोड यहीं दिखाया गया है।','డెమో మోడ్: SMS పంపబడదు. మీ కోడ్ ఇక్కడే చూపబడింది.','டெமோ முறை: SMS அனுப்பப்படாது. உங்கள் குறியீடு இங்கே காட்டப்படுகிறது.'],
+'plogin.bad':['Wrong code. {n} tries left.','गलत कोड। {n} कोशिशें बाकी हैं।','తప్పు కోడ్. {n} ప్రయత్నాలు మిగిలి ఉన్నాయి.','தவறான குறியீடு. {n} முயற்சிகள் மீதமுள்ளன.'],
+'plogin.expired':['That code has expired. Ask for a new one.','वह कोड समाप्त हो गया है। नया कोड मँगवाएँ।','ఆ కోడ్ గడువు ముగిసింది. కొత్తది అడగండి.','அந்தக் குறியீடு காலாவதியாகிவிட்டது. புதியதைக் கேளுங்கள்.'],
+'plogin.lock':['Too many wrong codes. Sign-in is locked for {m}:{s}.','बहुत ज़्यादा गलत कोड। साइन-इन {m}:{s} के लिए बंद है।','చాలా తప్పు కోడ్‌లు. సైన్-ఇన్ {m}:{s} వరకు లాక్ అయింది.','அதிக தவறான குறியீடுகள். உள்நுழைவு {m}:{s} நேரத்திற்குப் பூட்டப்பட்டுள்ளது.'],
+'plogin.reqlock':['Too many codes requested. Try again in {m}:{s}.','बहुत ज़्यादा कोड मँगवाए गए। {m}:{s} बाद फिर कोशिश करें।','చాలా కోడ్‌లు అడిగారు. {m}:{s} తర్వాత మళ్లీ ప్రయత్నించండి.','அதிகமான குறியீடுகள் கோரப்பட்டன. {m}:{s} கழித்து மீண்டும் முயலுங்கள்.'],
+'plogin.change':['Change number','नंबर बदलें','నంబర్ మార్చండి','எண்ணை மாற்று'],
+'plogin.resend':['Send a new code','नया कोड भेजें','కొత్త కోడ్ పంపండి','புதிய குறியீட்டை அனுப்பு'],
+'plogin.h':['Your bookings stay private','आपकी बुकिंग निजी रहती हैं','మీ బుకింగ్‌లు ప్రైవేట్‌గా ఉంటాయి','உங்கள் முன்பதிவுகள் தனிப்பட்டவை'],
+'plogin.hb':['A one-time code confirms the number is yours before any booking details are shown.','कोई भी बुकिंग विवरण दिखाने से पहले एक बार का कोड पुष्टि करता है कि नंबर आपका है।','బుకింగ్ వివరాలు చూపే ముందు, ఆ నంబర్ మీదేనని ఒకసారి వాడే కోడ్ నిర్ధారిస్తుంది.','முன்பதிவு விவரங்கள் காட்டப்படும் முன், அந்த எண் உங்களுடையது என்பதை ஒருமுறை குறியீடு உறுதி செய்கிறது.'],
+'plogin.rule':['Sign-in locks for {min} minutes after {max} wrong codes. You can request {req} codes per {min} minutes.','{max} गलत कोड के बाद साइन-इन {min} मिनट के लिए बंद हो जाता है। {min} मिनट में {req} कोड मँगवा सकते हैं।','{max} తప్పు కోడ్‌ల తర్వాత సైన్-ఇన్ {min} నిమిషాలు లాక్ అవుతుంది. {min} నిమిషాల్లో {req} కోడ్‌లు అడగవచ్చు.','{max} தவறான குறியீடுகளுக்குப் பிறகு உள்நுழைவு {min} நிமிடங்கள் பூட்டப்படும். {min} நிமிடங்களில் {req} குறியீடுகள் கோரலாம்.'],
+'plogin.who':['Signed in: {p}','साइन इन: {p}','సైన్ ఇన్: {p}','உள்நுழைந்தது: {p}'],
+'foot.copy':['© {y} AROGYA.Q. All rights reserved.','© {y} AROGYA.Q. सर्वाधिकार सुरक्षित।','© {y} AROGYA.Q. అన్ని హక్కులు ప్రత్యేకించబడ్డాయి.','© {y} AROGYA.Q. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.'],
+'foot.terms':['Terms and copyright','नियम और कॉपीराइट','నిబంధనలు మరియు కాపీరైట్','விதிமுறைகளும் பதிப்புரிமையும்'],
+'foot.tag':['Online appointment booking and queue management','ऑनलाइन अपॉइंटमेंट बुकिंग और कतार प्रबंधन','ఆన్‌లైన్ అపాయింట్‌మెంట్ బుకింగ్ మరియు క్యూ నిర్వహణ','ஆன்லைன் முன்பதிவு மற்றும் வரிசை மேலாண்மை'],
+'terms.t':['Terms of use and copyright','उपयोग की शर्तें और कॉपीराइट','వినియోగ నిబంధనలు మరియు కాపీరైట్','பயன்பாட்டு விதிமுறைகளும் பதிப்புரிமையும்'],
+'terms.1h':['Copyright','कॉपीराइट','కాపీరైట్','பதிப்புரிமை'],
+'terms.1':['© {y} AROGYA.Q. All rights reserved. The AROGYA.Q name, logo, design, text and software are protected by copyright and other intellectual property laws. You may not copy, modify, distribute, sell or reverse engineer any part of the app without written permission.','© {y} AROGYA.Q. सर्वाधिकार सुरक्षित। AROGYA.Q का नाम, लोगो, डिज़ाइन, टेक्स्ट और सॉफ़्टवेयर कॉपीराइट तथा अन्य बौद्धिक संपदा कानूनों द्वारा सुरक्षित हैं। लिखित अनुमति के बिना आप ऐप के किसी भी हिस्से की नकल, संशोधन, वितरण, बिक्री या रिवर्स इंजीनियरिंग नहीं कर सकते।','© {y} AROGYA.Q. అన్ని హక్కులు ప్రత్యేకించబడ్డాయి. AROGYA.Q పేరు, లోగో, డిజైన్, టెక్స్ట్ మరియు సాఫ్ట్‌వేర్ కాపీరైట్ మరియు ఇతర మేధో సంపత్తి చట్టాల ద్వారా రక్షించబడ్డాయి. లిఖితపూర్వక అనుమతి లేకుండా యాప్‌లోని ఏ భాగాన్నీ కాపీ చేయకూడదు, మార్చకూడదు, పంపిణీ చేయకూడదు, అమ్మకూడదు లేదా రివర్స్ ఇంజనీరింగ్ చేయకూడదు.','© {y} AROGYA.Q. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை. AROGYA.Q பெயர், லோகோ, வடிவமைப்பு, உரை மற்றும் மென்பொருள் பதிப்புரிமை மற்றும் பிற அறிவுசார் சொத்துச் சட்டங்களால் பாதுகாக்கப்படுகின்றன. எழுத்துப்பூர்வ அனுமதி இல்லாமல் செயலியின் எந்தப் பகுதியையும் நகலெடுக்கவோ, மாற்றவோ, பகிரவோ, விற்கவோ, ரிவர்ஸ் இன்ஜினியரிங் செய்யவோ கூடாது.'],
+'terms.2h':['Using the app','ऐप का उपयोग','యాప్ వినియోగం','செயலியைப் பயன்படுத்துதல்'],
+'terms.2':["Use AROGYA.Q only to book, change or cancel your own or a family member's appointments and to follow your queue. Do not misuse it, try to reach other people's data, or interfere with how it works.",'AROGYA.Q का उपयोग केवल अपनी या परिवार के सदस्य की अपॉइंटमेंट बुक, बदलने या रद्द करने और अपनी कतार देखने के लिए करें। इसका दुरुपयोग न करें, दूसरों का डेटा देखने की कोशिश न करें और इसके काम में बाधा न डालें।','AROGYA.Q ని మీ లేదా కుటుంబ సభ్యుల అపాయింట్‌మెంట్‌లను బుక్ చేయడానికి, మార్చడానికి లేదా రద్దు చేయడానికి మరియు మీ క్యూను అనుసరించడానికి మాత్రమే ఉపయోగించండి. దుర్వినియోగం చేయవద్దు, ఇతరుల డేటాను చూడటానికి ప్రయత్నించవద్దు, దాని పనితీరుకు అంతరాయం కలిగించవద్దు.','AROGYA.Q ஐ உங்கள் அல்லது குடும்ப உறுப்பினரின் முன்பதிவுகளைப் பதிவு செய்ய, மாற்ற அல்லது ரத்து செய்ய மற்றும் உங்கள் வரிசையைப் பின்தொடர மட்டுமே பயன்படுத்துங்கள். தவறாகப் பயன்படுத்தவோ, பிறரின் தரவை அணுக முயலவோ, செயல்பாட்டில் குறுக்கிடவோ கூடாது.'],
+'terms.3h':['Not medical advice','यह चिकित्सा सलाह नहीं है','వైద్య సలహా కాదు','மருத்துவ ஆலோசனை அல்ல'],
+'terms.3':['AROGYA.Q manages appointments and queues. It does not give medical advice, diagnosis or treatment. In an emergency, call your local emergency number or go to the nearest Casualty department.','AROGYA.Q अपॉइंटमेंट और कतार का प्रबंधन करता है। यह चिकित्सा सलाह, निदान या इलाज नहीं देता। आपातकाल में अपने स्थानीय आपातकालीन नंबर पर कॉल करें या नज़दीकी कैज़ुअल्टी विभाग जाएँ।','AROGYA.Q అపాయింట్‌మెంట్‌లు మరియు క్యూలను నిర్వహిస్తుంది. ఇది వైద్య సలహా, రోగ నిర్ధారణ లేదా చికిత్స ఇవ్వదు. అత్యవసర పరిస్థితిలో మీ స్థానిక అత్యవసర నంబర్‌కు కాల్ చేయండి లేదా సమీపంలోని కాజువాల్టీ విభాగానికి వెళ్లండి.','AROGYA.Q முன்பதிவுகளையும் வரிசைகளையும் நிர்வகிக்கிறது. இது மருத்துவ ஆலோசனை, நோய் கண்டறிதல் அல்லது சிகிச்சை வழங்காது. அவசர நிலையில் உங்கள் உள்ளூர் அவசர எண்ணை அழைக்கவும் அல்லது அருகிலுள்ள விபத்து சிகிச்சைப் பிரிவுக்குச் செல்லவும்.'],
+'terms.4h':['Your information','आपकी जानकारी','మీ సమాచారం','உங்கள் தகவல்'],
+'terms.4':['Details such as your name, mobile number and reason for visit are used only to manage your appointment and can be seen by hospital staff. Share only what is needed.','आपका नाम, मोबाइल नंबर और आने का कारण जैसी जानकारी केवल आपकी अपॉइंटमेंट के प्रबंधन के लिए उपयोग होती है और अस्पताल कर्मचारी इसे देख सकते हैं। केवल ज़रूरी जानकारी दें।','మీ పేరు, మొబైల్ నంబర్, సందర్శన కారణం వంటి వివరాలు మీ అపాయింట్‌మెంట్‌ను నిర్వహించడానికి మాత్రమే ఉపయోగించబడతాయి మరియు ఆసుపత్రి సిబ్బంది చూడగలరు. అవసరమైనంత సమాచారాన్ని మాత్రమే ఇవ్వండి.','உங்கள் பெயர், மொபைல் எண், வருகைக்கான காரணம் போன்ற விவரங்கள் உங்கள் முன்பதிவை நிர்வகிக்க மட்டுமே பயன்படுத்தப்படும்; மருத்துவமனை பணியாளர்கள் அவற்றைப் பார்க்கலாம். தேவையான தகவலை மட்டும் பகிருங்கள்.'],
+'terms.5h':['Sign-in and access','साइन-इन और पहुँच','సైన్-ఇన్ మరియు యాక్సెస్','உள்நுழைவும் அணுகலும்'],
+'terms.5':['Staff areas need a staff ID and PIN. Sign-in locks for {min} minutes after {max} wrong attempts. Keep your credentials private.','स्टाफ वाले हिस्सों के लिए स्टाफ आईडी और पिन चाहिए। {max} गलत कोशिशों के बाद साइन-इन {min} मिनट के लिए बंद हो जाता है। अपने क्रेडेंशियल गोपनीय रखें।','సిబ్బంది విభాగాలకు సిబ్బంది ID మరియు PIN అవసరం. {max} తప్పు ప్రయత్నాల తర్వాత సైన్-ఇన్ {min} నిమిషాలు లాక్ అవుతుంది. మీ ఆధారాలను గోప్యంగా ఉంచండి.','பணியாளர் பகுதிகளுக்கு பணியாளர் ஐடியும் PIN-ம் தேவை. {max} தவறான முயற்சிகளுக்குப் பிறகு உள்நுழைவு {min} நிமிடங்கள் பூட்டப்படும். உங்கள் விவரங்களை ரகசியமாக வைத்திருங்கள்.'],
+'terms.6h':['Changes','बदलाव','మార్పులు','மாற்றங்கள்'],
+'terms.6':['These terms may be updated. Continuing to use the app means you accept the updated terms.','ये शर्तें अपडेट की जा सकती हैं। ऐप का उपयोग जारी रखने का मतलब है कि आप अपडेट की गई शर्तें स्वीकार करते हैं।','ఈ నిబంధనలు నవీకరించబడవచ్చు. యాప్‌ను ఉపయోగించడం కొనసాగిస్తే నవీకరించిన నిబంధనలను అంగీకరించినట్లే.','இந்த விதிமுறைகள் புதுப்பிக்கப்படலாம். செயலியைத் தொடர்ந்து பயன்படுத்தினால் புதுப்பிக்கப்பட்ட விதிமுறைகளை ஏற்றுக்கொள்கிறீர்கள் என்று பொருள்.'],
+'close':['Close','बंद करें','మూసివేయండి','மூடு']
+};
+function tl(lang,key,vars){
+  var row=D[key],i=LANGS.indexOf(lang);
+  var s=row?(row[i>=0?i:0]||row[0]):key;
+  return s.replace(/\{(\w+)\}/g,function(_,k){return vars&&vars[k]!=null?vars[k]:''});
+}
+function pickLang(){
+  try{var l=localStorage.getItem('aq.lang');if(LANGS.indexOf(l)>=0)return l}catch(_){}
+  var n=(navigator.language||'en').slice(0,2);
+  return LANGS.indexOf(n)>=0?n:'en';
+}
+
+/* ---------- helpers ---------- */
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var ICONS={
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  calendar:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  users:'<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19c.6-3.3 3-5 6-5s5.4 1.7 6 5"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M17 14.2c2.3.2 3.7 1.6 4.2 4.3"/>',
+  chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',
+  shield:'<path d="M12 3l7 3v5.5c0 4.3-3 7.8-7 9.5-4-1.7-7-5.2-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/>',
+  bell:'<path d="M6 16v-5a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 004 0"/>',
+  pulse:'<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  alert:'<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
+  star:'<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.7 1-5.9L3.5 9.7l5.9-.8z"/>',
+  lock:'<rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/>'
+};
+function ic(n){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'}
+var HERO_SVG='<svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg"><circle cx="170" cy="140" r="104" fill="rgba(255,255,255,.1)"/><circle cx="170" cy="140" r="40" fill="none" stroke="#5DD4B8" stroke-width="7"/><path d="M170 117v24l17 9" stroke="#5DD4B8" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="262" cy="50" r="34" fill="#5DD4B8"/><path d="M247 51l11 11 19-22" stroke="#0F3A3C" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="70" cy="214" r="31" fill="#F28B6E"/><rect x="54" y="201" width="32" height="22" rx="7" fill="none" stroke="#0F3A3C" stroke-width="4"/><path d="M62 223v9l10-9" fill="#F28B6E" stroke="#0F3A3C" stroke-width="4" stroke-linejoin="round"/></svg>';
+
+var STAFF={id:'STAFF01',pin:'2468'};
+var LIM={staff:{max:3,lockMs:300000},lookup:{max:5,lockMs:300000},patient:{max:3,lockMs:300000},otp:{max:3,lockMs:300000}};
+var OTP_MS=300000;
+
+/* ---------- state ---------- */
+var S={lang:pickLang(),role:'patient',pTab:'book',sTab:'desk',docId:'rao',date:null,slot:null,
+  form:{name:'',phone:'',age:'',reason:'',channel:'whatsapp'},err:'',banner:null,resched:null,cancelId:null,qr:{},lookupMsg:null,
+  deskDoc:'all',deskQ:'',walkOpen:false,walk:{name:'',age:'',doctor:'rao',reason:''},reminder:null,
+  docView:'rao',readOnly:false,mode:'connecting',busy:false,terms:false,
+  staffAuth:null,login:{id:'',pin:''},loginBad:false,
+  patAuth:null,pl:{phone:'',code:'',step:'phone',otp:null,otpAt:0},plMsg:null};
+function t(k,v){return tl(S.lang,k,v)}
+function deptName(d,lang){return tl(lang||S.lang,'dept.'+d.code)}
+function roomName(d,lang){return tl(lang||S.lang,'room',{n:d.rn})}
+function initials(d){return d.name.replace('Dr. ','').split(' ').map(function(w){return w[0]}).join('')}
+function avatar(d){var i=DOCTORS.indexOf(d)%6+1;return '<span class="av" style="background:var(--c'+i+');color:var(--c'+i+'i)">'+initials(d)+'</span>'}
+
+function todayStr(){return dstr(new Date())}
+function addDays(n){var d=new Date();return dstr(new Date(d.getFullYear(),d.getMonth(),d.getDate()+n))}
+function dayParts(date,lang){
+  var p=date.split('-').map(Number),d=new Date(p[0],p[1]-1,p[2]),loc=LOC[lang||S.lang]||'en-IN';
+  return {wd:d.toLocaleDateString(loc,{weekday:'short'}),n:d.getDate(),mo:d.toLocaleDateString(loc,{month:'short'})};
+}
+function dLabel(date,lang){
+  lang=lang||S.lang;
+  if(date===todayStr())return tl(lang,'today');
+  if(date===addDays(1))return tl(lang,'tomorrow');
+  var p=dayParts(date,lang);return p.wd+', '+p.n+' '+p.mo;
+}
+function fmtPhone(p){return p&&p.length===10?p.slice(0,5)+' '+p.slice(5):(p||'')}
+function normPhone(v){var d=String(v||'').replace(/\D/g,'');if(d.length===12&&d.indexOf('91')===0)d=d.slice(2);return d.length===10?d:null}
+function newId(){
+  var al='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',b=new Uint8Array(5),s='';
+  try{crypto.getRandomValues(b)}catch(_){for(var i=0;i<5;i++)b[i]=Math.floor(Math.random()*256)}
+  for(var j=0;j<5;j++)s+=al[b[j]%al.length];
+  return 'AQ-'+s;
+}
+function nowHHMM(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())}
+function mins(n){return n==null?'—':(n<10?n.toFixed(1):Math.round(n))+' min'}
+function pct(n){return n==null?'—':Math.round(n*100)+'%'}
+function pill(a,lang){
+  lang=lang||S.lang;
+  return (a.emergency&&(a.status==='checked_in'||a.status==='booked')?'<span class="pill emerg">'+tl(lang,'pill.emerg')+'</span> ':'')+'<span class="pill '+a.status+'">'+tl(lang,'st.'+a.status)+'</span>';
+}
+function toast(msg){var el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove('show')},3200)}
+
+/* ---------- attempt limits (kept on this device) ---------- */
+var memLim={};
+function limState(key){
+  try{var j=JSON.parse(localStorage.getItem('aq.lim.'+key)||'null');if(j)return j}catch(_){}
+  return memLim[key]||{n:0,until:0};
+}
+function limSave(key,s){memLim[key]=s;try{localStorage.setItem('aq.lim.'+key,JSON.stringify(s))}catch(_){}}
+function limStatus(key){
+  var s=limState(key),now=Date.now();
+  if(s.until&&s.until<=now){s={n:0,until:0};limSave(key,s)}
+  return {locked:s.until>now,remainMs:Math.max(0,s.until-now),left:Math.max(0,LIM[key].max-(s.n||0))};
+}
+function limFail(key){
+  var s=limState(key);s.n=(s.n||0)+1;
+  if(s.n>=LIM[key].max)s.until=Date.now()+LIM[key].lockMs;
+  limSave(key,s);return limStatus(key);
+}
+function limReset(key){limSave(key,{n:0,until:0})}
+function mmss(ms){var s=Math.ceil(ms/1000);return {m:Math.floor(s/60),s:pad(s%60)}}
+var lockTimer=null;
+function ensureTicker(){
+  if(lockTimer)return;
+  lockTimer=setInterval(function(){
+    if(!limStatus('staff').locked&&!limStatus('lookup').locked&&!limStatus('patient').locked&&!limStatus('otp').locked){clearInterval(lockTimer);lockTimer=null}
+    render();
+  },1000);
+}
+
+/* ---------- this device's own bookings ---------- */
+var ME=(function(){try{var j=JSON.parse(localStorage.getItem('aq.me')||'{}');return {ids:j.ids||[],phones:j.phones||[]}}catch(_){return {ids:[],phones:[]}}})();
+function remember(id,phone){
+  if(id&&ME.ids.indexOf(id)<0)ME.ids.push(id);
+  if(phone&&ME.phones.indexOf(phone)<0)ME.phones.push(phone);
+  try{localStorage.setItem('aq.me',JSON.stringify(ME))}catch(_){}
+}
+
+/* ---------- store: shared database when available, this page only otherwise ---------- */
+var Store={
+  db:null,uid:null,appts:new Map(),subs:[],chain:new Map(),
+  on:function(fn){this.subs.push(fn)},
+  emit:function(){this.subs.forEach(function(f){f()})},
+  serial:function(id,fn){var p=(this.chain.get(id)||Promise.resolve()).catch(function(){}).then(fn);this.chain.set(id,p);return p},
+  create:function(doc){
+    var self=this;
+    if(this.db)return this.serial(doc.id,function(){return self.db.collection('appts').doc(doc.id).set(doc)});
+    this.appts.set(doc.id,doc);this.emit();return Promise.resolve();
+  },
+  patch:function(id,p){
+    var self=this;
+    if(this.db)return this.serial(id,function(){return self.db.collection('appts').doc(id).update(p)});
+    var a=this.appts.get(id);if(a){this.appts.set(id,Object.assign({},a,p));this.emit()}
+    return Promise.resolve();
+  },
+  remove:function(id){
+    var self=this;
+    if(this.db)return this.serial(id,function(){return self.db.collection('appts').doc(id).delete()});
+    this.appts.delete(id);this.emit();return Promise.resolve();
+  }
+};
+
+/* ---------- slot logic ---------- */
+function freeSlots(doctorId,date,exceptId){
+  var now=Date.now();
+  return slotsOf().filter(function(s){return tsOf(date,s)>now&&!slotTaken(Store.appts,doctorId,date,s,exceptId)});
+}
+function nextFree(doctorId){
+  for(var i=0;i<7;i++){var d=addDays(i),f=freeSlots(doctorId,d);if(f.length)return {date:d,slot:f[0]}}
+  return null;
+}
+function ensureDate(exceptId){
+  var f=S.date?freeSlots(S.docId,S.date,exceptId):[];
+  if(!S.date||!f.length){
+    var n=nextFree(S.docId);S.date=n?n.date:todayStr();
+    f=freeSlots(S.docId,S.date,exceptId);
+  }
+  if(S.slot&&f.indexOf(S.slot)<0)S.slot=null;
+}
+function claimSlot(doctorId,date,slot,apptId){
+  if(!Store.db)return Promise.resolve(true);
+  var ref=Store.db.doc('slots/'+doctorId+'_'+date+'_'+slot.replace(':',''));
+  return ref.acquire({holder:apptId,ttlMs:5000}).then(function(l){
+    if(!l.acquired)return false;
+    return ref.get().then(function(snap){
+      if(snap.exists){
+        var cur=snap.data().apptId,a=Store.appts.get(cur);
+        var held=cur&&cur!==apptId&&(!a||(isActive(a)&&a.doctorId===doctorId&&a.date===date&&a.slot===slot));
+        if(held)return false;
+      }
+      return ref.set({apptId:apptId,doctorId:doctorId,date:date,slot:slot}).then(function(){return true});
+    });
+  }).catch(function(){return !slotTaken(Store.appts,doctorId,date,slot,apptId)});
+}
+
+/* ---------- actions ---------- */
+function run(fn,okMsg){
+  return Promise.resolve().then(fn).then(function(){if(okMsg)toast(okMsg)}).catch(function(e){
+    toast(e&&e.code==='invalid_argument'?t('err.view'):t('err.conn'));
+  });
+}
+function setErr(msg,focusId){
+  S.err=msg;render();
+  if(focusId){var el=document.getElementById(focusId);if(el)el.focus()}
+}
+function doBook(){
+  var f=S.form,phone=normPhone(f.phone);
+  if(f.name.trim().length<2)return setErr(t('err.name'),'f-name');
+  if(!phone)return setErr(t('err.phone'),'f-phone');
+  if(!S.slot)return setErr(t('err.slot'));
+  S.err='';S.busy=true;render();
+  var id=newId(),doctorId=S.docId,date=S.date,slot=S.slot;
+  claimSlot(doctorId,date,slot,id).then(function(ok){
+    if(!ok){S.busy=false;S.slot=null;S.err=t('err.taken');render();return}
+    var a={id:id,uid:Store.uid||null,name:f.name.trim(),phone:phone,age:f.age?+f.age:null,reason:f.reason.trim(),
+      doctorId:doctorId,date:date,slot:slot,channel:f.channel,status:'booked',emergency:false,emergencyAt:null,walkin:false,
+      createdAt:Date.now(),checkedInAt:null,calledAt:null,doneAt:null,rating:null,sample:false};
+    return Store.create(a).then(function(){
+      remember(id,phone);S.banner={id:id};S.form.reason='';S.slot=null;S.pTab='visit';S.busy=false;render();window.scrollTo(0,0);
+    });
+  }).catch(function(e){S.busy=false;S.err=e&&e.code==='invalid_argument'?t('book.readonly'):t('err.save');render()});
+}
+function doResched(){
+  var a=Store.appts.get(S.resched);
+  if(!a||!S.slot)return;
+  S.busy=true;render();
+  var newDate=S.date;
+  claimSlot(a.doctorId,newDate,S.slot,a.id).then(function(ok){
+    if(!ok){S.busy=false;S.slot=null;S.err=t('err.taken');render();return}
+    return Store.patch(a.id,{date:newDate,slot:S.slot}).then(function(){
+      S.resched=null;S.slot=null;S.busy=false;S.pTab='visit';render();toast(t('toast.moved',{when:dLabel(newDate)}));
+    });
+  }).catch(function(){S.busy=false;S.err=t('err.move');render()});
+}
+function checkIn(id,via){
+  var a=Store.appts.get(id);
+  if(!a||a.status!=='booked')return;
+  run(function(){return Store.patch(id,{status:'checked_in',checkedInAt:Date.now(),via:via})},via==='app'?t('toast.checked'):'Checked in.');
+}
+function callNext(doctorId){
+  var q=queueOf(Store.appts,doctorId,todayStr());
+  if(q.serving)return toast('Finish the current visit first.');
+  if(!q.waiting.length)return toast('Nobody is waiting.');
+  run(function(){return Store.patch(q.waiting[0].id,{status:'in_consult',calledAt:Date.now()})});
+}
+function setStatus(id,status,extra){run(function(){return Store.patch(id,Object.assign({status:status},extra||{}))})}
+function setEmergency(id,on){run(function(){return Store.patch(id,{emergency:on,emergencyAt:on?Date.now():null})},on?'Moved to the front of the queue.':'Priority removed.')}
+function addWalkIn(){
+  var w=S.walk;
+  if(w.name.trim().length<2)return toast('Enter the patient’s name.');
+  var now=Date.now(),a={id:newId(),uid:null,name:w.name.trim(),phone:'',age:w.age?+w.age:null,reason:w.reason.trim()||'Emergency',
+    doctorId:w.doctor,date:todayStr(),slot:nowHHMM(),channel:'sms',status:'checked_in',emergency:true,emergencyAt:now,walkin:true,
+    createdAt:now,checkedInAt:now,calledAt:null,doneAt:null,rating:null,sample:false,via:'desk'};
+  run(function(){return Store.create(a)},'Added at the front of '+docOf(w.doctor).name+'’s queue.').then(function(){S.walk={name:'',age:'',doctor:w.doctor,reason:''};S.walkOpen=false;render()});
+}
+function loadSample(){
+  S.busy=true;render();
+  var list=makeSample(Date.now()),chain=Promise.resolve();
+  list.forEach(function(a){chain=chain.then(function(){return Store.create(a)})});
+  chain.then(function(){toast('Sample day loaded.')}).catch(function(){toast('Could not load the sample day.')}).then(function(){S.busy=false;render()});
+}
+function clearSample(){
+  S.busy=true;render();
+  var ids=Array.from(Store.appts.values()).filter(function(a){return a.sample}).map(function(a){return a.id}),chain=Promise.resolve();
+  ids.forEach(function(id){chain=chain.then(function(){return Store.remove(id)})});
+  chain.then(function(){toast('Sample data removed.')}).catch(function(){toast('Could not remove all sample data.')}).then(function(){S.busy=false;render()});
+}
+function reminderText(a){
+  var d=docOf(a.doctorId),first=(a.name||'').split(' ')[0]||'there';
+  return 'Hello '+first+', this is a reminder from AROGYA.Q. Your visit with '+d.name+' ('+d.dept+') is '+dLabel(a.date,'en').toLowerCase()+' at '+fmt12(a.slot)+'. Booking ID '+a.id+'. Please arrive 10 minutes early and check in on the app.';
+}
+function copyText(txt){
+  var done=function(){toast('Copied.')};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){toast('Copy is blocked here. Select the text and copy it.')})}
+  else toast('Copy is blocked here. Select the text and copy it.');
+}
+function mineList(){
+  var today=todayStr();
+  var list=Array.from(Store.appts.values()).filter(function(a){
+    return (Store.uid&&a.uid===Store.uid)||ME.ids.indexOf(a.id)>=0||(a.phone&&ME.phones.indexOf(a.phone)>=0);
+  });
+  var open=function(a){return (a.status==='booked'||a.status==='checked_in'||a.status==='in_consult')&&a.date>=today};
+  var up=list.filter(open).sort(function(x,y){return (x.date+x.slot).localeCompare(y.date+y.slot)});
+  var past=list.filter(function(a){return !open(a)}).sort(function(x,y){return (y.date+y.slot).localeCompare(x.date+x.slot)});
+  return {up:up,past:past};
+}
+function doLogin(){
+  var st=limStatus('staff');
+  if(st.locked){render();return}
+  var id=(S.login.id||'').trim().toUpperCase(),pin=S.login.pin||'';
+  if(id===STAFF.id&&pin===STAFF.pin){
+    limReset('staff');S.staffAuth=id;S.login={id:'',pin:''};S.loginBad=false;
+    try{sessionStorage.setItem('aq.staff',id)}catch(_){}
+    render();return;
+  }
+  limFail('staff');S.login.pin='';S.loginBad=true;ensureTicker();render();
+  var el=document.getElementById('l-pin');if(el&&!limStatus('staff').locked)el.focus();
+}
+function newCode(){var b=new Uint16Array(1);try{crypto.getRandomValues(b)}catch(_){b[0]=Math.floor(Math.random()*65535)}return String(1000+(b[0]%9000))}
+function doSendOtp(){
+  if(limStatus('otp').locked||limStatus('patient').locked){render();return}
+  var ph=normPhone(S.pl.phone);
+  if(!ph){S.plMsg={k:'phone'};render();var e=document.getElementById('p-phone');if(e)e.focus();return}
+  S.pl.phone=ph;S.pl.otp=(ph==='1234567890')?'1234':newCode();S.pl.otpAt=Date.now();S.pl.code='';S.pl.step='code';S.plMsg={k:'sent'};
+  if(limFail('otp').locked)ensureTicker();
+  render();var c=document.getElementById('p-code');if(c)c.focus();
+}
+function doVerify(){
+  if(limStatus('patient').locked){render();return}
+  if(!S.pl.otp||Date.now()-S.pl.otpAt>OTP_MS){S.pl.otp=null;S.pl.step='phone';S.pl.code='';S.plMsg={k:'expired'};render();return}
+  if(S.pl.code.trim()===S.pl.otp){
+    var ph=S.pl.phone;limReset('patient');limReset('otp');
+    S.patAuth=ph;try{sessionStorage.setItem('aq.patient',ph)}catch(_){}
+    remember(null,ph);if(!S.form.phone)S.form.phone=ph;
+    S.pl={phone:'',code:'',step:'phone',otp:null,otpAt:0};S.plMsg=null;S.pTab='book';render();window.scrollTo(0,0);return;
+  }
+  var r=limFail('patient');S.pl.code='';S.plMsg={k:'bad'};
+  if(r.locked){S.pl.otp=null;S.pl.step='phone';ensureTicker()}
+  render();var c=document.getElementById('p-code');if(c)c.focus();
+}
+function patSignOut(){S.patAuth=null;S.plMsg=null;S.pl={phone:'',code:'',step:'phone',otp:null,otpAt:0};try{sessionStorage.removeItem('aq.patient')}catch(_){};render();window.scrollTo(0,0)}
+function signOut(){S.staffAuth=null;S.loginBad=false;try{sessionStorage.removeItem('aq.staff')}catch(_){};S.role='patient';render()}
+function doLookup(){
+  var st=limStatus('lookup');
+  if(st.locked){render();return}
+  var el=document.getElementById('lookup'),raw=(el&&el.value||'').trim(),found=false;
+  if(/^aq-/i.test(raw)){var a=Store.appts.get(raw.toUpperCase());if(a){remember(a.id,null);found=true}}
+  else{var p=normPhone(raw);if(p&&Array.from(Store.appts.values()).some(function(x){return x.phone===p})){remember(null,p);found=true}}
+  if(found){limReset('lookup');S.lookupMsg={ok:true}}
+  else{var r=limFail('lookup');S.lookupMsg={ok:false};if(r.locked)ensureTicker()}
+  render();
+}
+
+/* ---------- shell ---------- */
+function renderHeader(){
+  var sw=$('#roleSwitch');
+  sw.innerHTML='<button role="tab" data-act="role" data-v="patient" aria-selected="'+(S.role==='patient')+'">'+t('role.patient')+'</button>'+
+    '<button role="tab" data-act="role" data-v="staff" aria-selected="'+(S.role==='staff')+'">'+t('role.staff')+'</button>';
+  var live=S.mode==='live';
+  $('#sync').innerHTML='<span class="dot'+(live?'':' off')+'"></span><span>'+t(S.mode==='connecting'?'sync.connecting':live?'sync.live':'sync.demo')+'</span>';
+  var tabs,cur,html='';
+  if(S.role==='patient'){
+    tabs=[['book','tab.book','calendar'],['visit','tab.visit','check'],['board','tab.board','users']];cur=S.pTab;
+    html=tabs.map(function(x){return '<button role="tab" data-act="tab" data-v="'+x[0]+'" aria-selected="'+(cur===x[0])+'">'+ic(x[2])+t(x[1])+'</button>'}).join('');
+  }else if(S.staffAuth){
+    tabs=[['desk','Front desk','users'],['doctor','Doctor view','pulse'],['insights','Insights','chart']];cur=S.sTab;
+    html=tabs.map(function(x){return '<button role="tab" data-act="tab" data-v="'+x[0]+'" aria-selected="'+(cur===x[0])+'">'+ic(x[2])+x[1]+'</button>'}).join('')+
+      '<span class="who">'+ic('lock')+esc(S.staffAuth)+' <button class="btn ghost sm" data-act="signout">Sign out</button></span>';
+  }
+  if(S.role==='patient'&&!S.patAuth)html='';
+  else if(S.role==='patient')html+='<span class="who">'+ic('lock')+esc(t('plogin.who',{p:fmtPhone(S.patAuth)}))+' <button class="btn ghost sm" data-act="psignout">'+t('signout')+'</button></span>';
+  var nav=$('#subnav');nav.innerHTML=html;nav.hidden=!html;
+}
+function renderFooter(){
+  $('#foot').innerHTML='<div class="top"><div><div class="brand">AROGYA<i>.Q</i></div><p style="margin-top:6px">'+t('foot.tag')+'</p></div>'+
+    '<button class="link" data-act="terms">'+t('foot.terms')+'</button></div><hr><p>'+t('foot.copy',{y:new Date().getFullYear()})+'</p>';
+}
+function renderModal(){
+  var m=$('#modal');
+  if(!S.terms){m.hidden=true;m.innerHTML='';return}
+  var y=new Date().getFullYear(),vars={y:y,min:LIM.staff.lockMs/60000,max:LIM.staff.max},body='';
+  for(var i=1;i<=6;i++)body+='<section><h3>'+t('terms.'+i+'h')+'</h3><p>'+t('terms.'+i,vars)+'</p></section>';
+  if(m.hidden){
+    m.hidden=false;
+    m.innerHTML='<div class="modal" data-act="termsbg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="termsT"><div class="row between"><h2 id="termsT">'+t('terms.t')+'</h2></div>'+body+
+      '<div><button class="btn" id="termsClose" data-act="terms">'+t('close')+'</button></div></div></div>';
+    var c=document.getElementById('termsClose');if(c)c.focus();
+  }else{
+    m.querySelector('.sheet').innerHTML='<div class="row between"><h2 id="termsT">'+t('terms.t')+'</h2></div>'+body+'<div><button class="btn" id="termsClose" data-act="terms">'+t('close')+'</button></div>';
+  }
+}
+
+/* ---------- views: patient ---------- */
+function viewBook(){
+  var rs=S.resched?Store.appts.get(S.resched):null;
+  if(S.resched&&(!rs||rs.status!=='booked')){S.resched=null;rs=null}
+  if(rs)S.docId=rs.doctorId;
+  ensureDate(rs&&rs.id);
+  var doc=docOf(S.docId),free=freeSlots(S.docId,S.date,rs&&rs.id);
+  var days=[0,1,2,3,4,5,6].map(addDays);
+  var morning=slotsOf().filter(function(s){return toMin(s)<780}),afternoon=slotsOf().filter(function(s){return toMin(s)>=780});
+  function slotBtns(list){
+    return list.map(function(s){var ok=free.indexOf(s)>=0;
+      return '<button class="slot" data-act="slot" data-v="'+s+'" aria-pressed="'+(S.slot===s)+'"'+(ok?'':' disabled')+'>'+fmt12(s)+'</button>'}).join('');
+  }
+  var docCards=rs?'<div class="row" style="margin-top:14px">'+avatar(doc)+'<div><b style="font-family:var(--f-display)">'+doc.name+'</b><br><span class="muted small">'+deptName(doc)+' · '+roomName(doc)+'</span></div></div>':
+    '<div class="docs">'+DOCTORS.map(function(d){
+      var n=nextFree(d.id),sel=d.id===S.docId;
+      return '<button class="doc" data-act="doc" data-v="'+d.id+'" aria-pressed="'+sel+'">'+avatar(d)+'<b>'+d.name+'</b><span class="d2">'+deptName(d)+' · '+roomName(d)+'</span><span class="d3">'+(n?t('book.nextfree',{when:dLabel(n.date),time:fmt12(n.slot)}):t('book.noslots'))+'</span></button>';
+    }).join('')+'</div>';
+  var chosen=S.slot?doc.name+' · '+dLabel(S.date)+' · '+fmt12(S.slot):t('book.pick');
+  var f=S.form;
+  var details=rs?'':'<section class="card"><div class="sh"><span class="sn">3</span><h2>'+t('book.s3')+'</h2></div><div class="grid2" style="margin-top:16px">'+
+    '<label class="fld">'+t('f.name')+'<input class="inp" id="f-name" data-f="name" autocomplete="name" value="'+esc(f.name)+'"></label>'+
+    '<label class="fld">'+t('f.phone')+'<input class="inp" id="f-phone" data-f="phone" inputmode="tel" autocomplete="tel" placeholder="'+t('f.phoneph')+'" value="'+esc(f.phone)+'"></label>'+
+    '<label class="fld">'+t('f.age')+'<input class="inp" id="f-age" data-f="age" inputmode="numeric" maxlength="3" value="'+esc(f.age)+'"></label>'+
+    '<label class="fld">'+t('f.reason')+'<input class="inp" id="f-reason" data-f="reason" placeholder="'+t('f.reasonph')+'" value="'+esc(f.reason)+'"></label>'+
+    '</div><div style="margin-top:18px" class="stack"><span class="eyebrow">'+t('f.remind')+'</span><div class="chan" role="group">'+
+    '<button data-act="chan" data-v="whatsapp" aria-pressed="'+(f.channel==='whatsapp')+'">'+t('ch.wa')+'</button><button data-act="chan" data-v="sms" aria-pressed="'+(f.channel==='sms')+'">'+t('ch.sms')+'</button></div></div></section>';
+  return (rs?'':'<section class="hero"><div><span class="eyebrow-l">'+t('hero.eyebrow')+'</span><h1>'+t('hero.title')+'</h1><p>'+t('hero.sub')+'</p>'+
+    '<ul class="hero-chips"><li>'+ic('clock')+t('hero.b1')+'</li><li>'+ic('users')+t('hero.b2')+'</li><li>'+ic('bell')+t('hero.b3')+'</li></ul></div><div class="hero-art" aria-hidden="true">'+HERO_SVG+'</div></section>')+
+    '<div class="cols"><div class="stack">'+
+    (rs?'<div class="note"><b>'+t('book.changing',{id:esc(rs.id)})+'</b> '+t('book.changingsub',{doc:doc.name})+'</div>':'')+
+    '<section class="card"><div class="sh"><span class="sn">1</span><h2>'+t(rs?'book.s1r':'book.s1')+'</h2></div>'+docCards+'</section>'+
+    '<section class="card"><div class="sh"><span class="sn">2</span><h2>'+t('book.s2')+'</h2></div><div class="days" role="group">'+days.map(function(d){
+      var p=dayParts(d),has=freeSlots(S.docId,d,rs&&rs.id).length>0;
+      return '<button class="day" data-act="date" data-v="'+d+'" aria-pressed="'+(S.date===d)+'"'+(has?'':' disabled')+'><span>'+(d===todayStr()?t('today'):p.wd)+'</span><b>'+p.n+'</b><span>'+p.mo+'</span></button>';
+    }).join('')+'</div>'+
+    (free.length?'<div class="slotgroup"><span class="eyebrow">'+t('book.morning')+'</span><div class="slots">'+slotBtns(morning)+'</div></div><div class="slotgroup"><span class="eyebrow">'+t('book.afternoon')+'</span><div class="slots">'+slotBtns(afternoon)+'</div></div>':
+      '<p class="muted" style="margin-top:14px">'+t('book.noday')+'</p>')+'</section>'+
+    details+
+    '<div class="card"><div class="row between"><div><span class="eyebrow">'+t('book.yourslot')+'</span><p class="num" style="font-weight:700;margin-top:4px">'+esc(chosen)+'</p></div>'+
+    '<button class="btn big" data-act="'+(rs?'resched':'book')+'"'+((S.slot&&!S.busy&&!S.readOnly)?'':' disabled')+'>'+t(S.busy?'book.saving':rs?'book.move':'book.confirm')+'</button></div>'+
+    (rs?'<div style="margin-top:10px"><button class="btn ghost sm" data-act="cancelresched">'+t('book.keeporig')+'</button></div>':'')+
+    (S.readOnly?'<p class="err" style="margin-top:12px">'+t('book.readonly')+'</p>':'')+
+    (S.err?'<p class="err" role="alert" id="formErr" style="margin-top:12px">'+esc(S.err)+'</p>':'')+'</div>'+
+    '</div><aside class="rail stack">'+
+    '<section class="railhead"><h3>'+t('after.title')+'</h3><ol class="after"><li><b>1</b><span>'+t('after.1')+'</span></li><li><b>2</b><span>'+t('after.2')+'</span></li><li><b>3</b><span>'+t('after.3')+'</span></li><li><b>4</b><span>'+t('after.4')+'</span></li></ol></section>'+
+    '</aside></div>';
+}
+function qrHtml(id){
+  var inner;
+  try{var q=qrcode(0,'M');q.addData('AROGYAQ:'+id);q.make();inner=q.createSvgTag(4,0)}catch(_){inner='<div class="idtxt">'+esc(id)+'</div>'}
+  return '<div class="pass"><div class="qr" aria-label="'+esc(id)+'">'+inner+'</div><div><b class="num" style="font:700 20px var(--f-display)">'+esc(id)+'</b><p class="muted small" style="margin-top:4px">'+t('qr.note')+'</p></div></div>';
+}
+function stars(a){
+  var h='<div class="stars" role="group">';
+  for(var i=1;i<=5;i++)h+='<button data-act="rate" data-id="'+a.id+'" data-v="'+i+'" class="'+(a.rating>=i?'on':'')+'" aria-label="'+i+'/5">★</button>';
+  return h+'</div>';
+}
+function visitCard(a){
+  var d=docOf(a.doctorId),today=todayStr(),isToday=a.date===today;
+  var stage={booked:0,checked_in:1,in_consult:2,done:3}[a.status];
+  var stepper=stage==null?'':'<ol class="steps">'+[1,2,3,4].map(function(n,i){return '<li class="'+(i<stage?'on':i===stage?(a.status==='done'?'on':'now'):'')+'">'+t('step.'+n)+'</li>'}).join('')+'</ol>';
+  var body='';
+  if(a.status==='booked'){
+    body=isToday?'<div class="row"><button class="btn big" data-act="checkin" data-id="'+a.id+'">'+t('checkin.btn')+'</button><span class="muted small" style="flex:1;min-width:200px">'+t('checkin.hint')+'</span></div>':
+      '<p class="muted small">'+t(a.date>today?'checkin.later':'checkin.old')+'</p>';
+    body+='<div class="row">'+
+      '<button class="btn ghost sm" data-act="qr" data-id="'+a.id+'">'+t(S.qr[a.id]?'qr.hide':'qr.show')+'</button>'+
+      '<button class="btn ghost sm" data-act="startresched" data-id="'+a.id+'">'+t('change')+'</button>'+
+      (S.cancelId===a.id?'<span class="small"><b>'+t('cancel.q')+'</b></span><button class="btn urgent sm" data-act="cancelyes" data-id="'+a.id+'">'+t('cancel.yes')+'</button><button class="btn ghost sm" data-act="cancelno">'+t('cancel.no')+'</button>':
+        '<button class="btn ghost sm" data-act="cancel" data-id="'+a.id+'">'+t('cancel')+'</button>')+'</div>'+(S.qr[a.id]?qrHtml(a.id):'');
+  }else if(a.status==='checked_in'){
+    var w=waitInfo(Store.appts,a),tok=tokenOf(Store.appts,a);
+    body=(a.emergency?'<div class="err">'+t('tok.priority')+'</div>':'')+
+      '<div class="ticket"><div class="stub"><span class="eyebrow-l">'+t('tok.label')+'</span><div class="tok">'+tok+'</div></div><div class="qstats">'+
+      '<div><b>'+(w&&w.serving?tokenOf(Store.appts,w.serving):'—')+'</b><span>'+t('tok.now')+'</span></div>'+
+      '<div><b>'+(w?w.ahead:'—')+'</b><span>'+t('tok.ahead')+'</span></div>'+
+      '<div><b>'+(w?(w.next?t('tok.next'):t('tok.min',{n:w.mins})):'—')+'</b><span>'+t('tok.est')+'</span></div></div></div>'+
+      '<p class="muted small">'+t('tok.hint')+'</p>';
+  }else if(a.status==='in_consult'){
+    body='<div class="ok"><b>'+t('turn',{room:roomName(d),doc:d.name})+'</b></div>';
+  }else if(a.status==='done'){
+    body='<div><p style="font-weight:700;margin-bottom:6px">'+t(a.rating?'rate.thanks':'rate.q')+'</p>'+stars(a)+'</div>';
+  }else if(a.status==='no_show'){
+    body='<p class="muted small">'+t('noshow.note')+'</p>';
+  }
+  return '<article class="card visit"><div class="vhead">'+avatar(d)+'<div class="vt"><span class="eyebrow">'+deptName(d)+'</span><h3>'+d.name+'</h3>'+
+    '<p class="muted num" style="margin-top:2px">'+dLabel(a.date)+' · '+fmt12(a.slot)+' · '+roomName(d)+'</p></div>'+
+    '<div class="vr"><div>'+pill(a)+'</div><div class="small muted num" style="margin-top:6px">'+t('id',{id:esc(a.id)})+'</div></div></div>'+stepper+body+'</article>';
+}
+function viewVisit(){
+  var m=mineList(),h='';
+  if(S.banner){
+    var b=Store.appts.get(S.banner.id);
+    h+='<div class="ok row between"><span>'+t('banner.t',{id:'<b class="num">'+esc(S.banner.id)+'</b>',when:b?esc(dLabel(b.date)+', '+fmt12(b.slot)):'',ch:t(b&&b.channel==='sms'?'ch.sms':'ch.wa')})+'</span><button class="btn ghost sm" data-act="dismiss">'+t('dismiss')+'</button></div>';
+  }
+  if(!m.up.length&&!m.past.length){
+    h+='<section class="card empty"><h3>'+t('visit.e.t')+'</h3><p>'+t('visit.e.b')+'</p><p style="margin-top:16px"><button class="btn" data-act="tab" data-v="book">'+t('tab.book')+'</button></p></section>';
+  }else{
+    h+=(m.up.length?m.up.map(visitCard).join(''):'<section class="card empty"><h3>'+t('visit.n.t')+'</h3><p>'+t('visit.n.b')+'</p></section>');
+    if(m.past.length)h+='<h2 style="margin-top:8px">'+t('visit.past')+'</h2>'+m.past.map(visitCard).join('');
+  }
+  var lk=limStatus('lookup'),msg='';
+  if(lk.locked){var tm=mmss(lk.remainMs);msg='<p class="err" style="margin-top:12px" role="status">'+t('lookup.lock',{m:tm.m,s:tm.s})+'</p>'}
+  else if(S.lookupMsg){msg=S.lookupMsg.ok?'<p class="ok" style="margin-top:12px" role="status">'+t('lookup.ok')+'</p>':'<p class="err" style="margin-top:12px" role="status">'+t('lookup.no',{n:lk.left})+'</p>'}
+  h+='<section class="card"><h3>'+t('lookup.t')+'</h3><p class="muted small" style="margin:4px 0 14px">'+t('lookup.s')+'</p>'+
+    '<div class="row"><input class="inp" id="lookup" style="flex:1;min-width:200px"'+(lk.locked?' disabled':'')+' placeholder="'+t('lookup.ph')+'"><button class="btn" data-act="lookup"'+(lk.locked?' disabled':'')+'>'+t('lookup.btn')+'</button></div>'+msg+'</section>';
+  return '<div class="stack" style="max-width:780px">'+h+'</div>';
+}
+function viewBoard(){
+  var today=todayStr(),mine=mineList().up.filter(function(a){return a.status==='checked_in'||a.status==='in_consult'}).map(function(a){return a.id});
+  var cards=DOCTORS.map(function(d){
+    var q=queueOf(Store.appts,d.id,today),isMine=q.list.some(function(a){return mine.indexOf(a.id)>=0});
+    var est=Math.round((q.waiting.length+(q.serving?0.5:0))*d.avg/5)*5;
+    return '<article class="bcard'+(isMine?' mine':'')+'"><div class="bh">'+avatar(d)+'<div><span class="eyebrow">'+deptName(d)+' · '+roomName(d)+'</span><h3 style="margin-top:2px">'+d.name+'</h3></div></div>'+
+      '<div class="bnowbox"><span class="small muted">'+t('tok.now')+'</span><div class="bnow">'+(q.serving?tokenOf(Store.appts,q.serving):'—')+'</div></div>'+
+      '<div class="row between small"><span>'+t('board.w',{n:'<b class="num">'+q.waiting.length+'</b>'})+'</span><span>'+(q.waiting.length||q.serving?t('board.e',{n:'<b class="num">'+est+'</b>'}):t('board.none'))+'</span></div>'+
+      (isMine?'<span class="pill in_consult" style="align-self:flex-start">'+t('board.mine')+'</span>':'')+'</article>';
+  }).join('');
+  return '<div class="stack"><div><h2>'+t('tab.board')+'</h2><p class="muted" style="margin-top:4px">'+t('board.s')+'</p></div><div class="boardgrid">'+cards+'</div></div>';
+}
+
+/* ---------- views: staff (English) ---------- */
+function viewEnterCode(){
+  var sp=limStatus('patient'),so=limStatus('otp'),k=S.plMsg&&S.plMsg.k,msg='';
+  if(k==='bad')msg='<p class="err" role="alert">'+t('plogin.bad',{n:sp.left})+'</p>';
+  return '<section class="login" style="max-width:520px;grid-template-columns:minmax(0,1fr)"><form class="form" id="pLoginForm" autocomplete="off" style="text-align:center;align-items:stretch">'+
+    '<span class="big" style="margin:0 auto;display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:var(--mint-soft);color:var(--accent)">'+ic('lock')+'</span>'+
+    '<div><h2 style="font-size:28px">'+t('plogin.enter')+'</h2><p class="muted" style="margin-top:6px">'+t('plogin.sent',{p:esc(fmtPhone(S.pl.phone)),m:OTP_MS/60000})+'</p></div>'+
+    '<div class="ok"><p class="small muted">'+t('plogin.demo')+'</p><div class="row" style="justify-content:center;margin-top:8px"><b class="num" style="font:700 34px/1 var(--f-display);letter-spacing:.18em">'+S.pl.otp+'</b><button type="button" class="btn sm" data-act="pfill">'+t('plogin.fill')+'</button></div></div>'+
+    '<input class="inp num" id="p-code" data-p="code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" aria-label="'+t('plogin.code')+'" placeholder="• • • •" style="text-align:center;font:700 34px var(--f-display);letter-spacing:.4em;padding:14px" value="'+esc(S.pl.code)+'">'+
+    msg+'<button class="btn big" type="button" data-act="psubmit">'+t('plogin.verify')+'</button>'+
+    '<div class="row" style="justify-content:center"><button type="button" class="btn ghost sm" data-act="pchange">'+t('plogin.change')+'</button><button type="button" class="btn ghost sm" data-act="presend"'+(so.locked?' disabled':'')+'>'+t('plogin.resend')+'</button></div>'+
+    '<p class="muted small">'+t('plogin.rule',{min:LIM.patient.lockMs/60000,max:LIM.patient.max,req:LIM.otp.max})+'</p></form></section>';
+}
+function viewPatientLogin(){
+  var sp=limStatus('patient'),so=limStatus('otp'),msg='',demo='',step=S.pl.step,k=S.plMsg&&S.plMsg.k;
+  if(step==='code'&&S.pl.otp&&!sp.locked)return viewEnterCode();
+  var locked=sp.locked,tm;
+  if(locked){tm=mmss(sp.remainMs);msg='<p class="err" role="alert">'+t('plogin.lock',{m:tm.m,s:tm.s})+'</p>'}
+  else if(step==='phone'&&so.locked){tm=mmss(so.remainMs);msg='<p class="err" role="alert">'+t('plogin.reqlock',{m:tm.m,s:tm.s})+'</p>'}
+  else if(k==='phone')msg='<p class="err" role="alert">'+t('err.phone')+'</p>';
+  else if(k==='bad')msg='<p class="err" role="alert">'+t('plogin.bad',{n:sp.left})+'</p>';
+  else if(k==='expired')msg='<p class="err" role="alert">'+t('plogin.expired')+'</p>';
+  if(step==='code'&&!locked&&S.pl.otp)demo='<div class="ok"><p>'+t('plogin.sent',{p:esc(fmtPhone(S.pl.phone)),m:OTP_MS/60000})+'</p><p class="small muted" style="margin-top:6px">'+t('plogin.demo')+'</p><div class="row" style="margin-top:10px"><b class="num" style="font:700 34px/1 var(--f-display);letter-spacing:.18em">'+S.pl.otp+'</b><button type="button" class="btn sm" data-act="pfill">'+t('plogin.fill')+'</button></div></div>';
+  var dis=locked?' disabled':'',field;
+  if(step==='code')field='<label class="fld">'+t('plogin.code')+'<input class="inp num" id="p-code" data-p="code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" value="'+esc(S.pl.code)+'"'+dis+'></label>';
+  else field='<label class="fld">'+t('f.phone')+'<input class="inp" id="p-phone" data-p="phone" inputmode="tel" autocomplete="tel" placeholder="'+t('f.phoneph')+'" value="'+esc(S.pl.phone)+'"'+(locked||so.locked?' disabled':'')+'></label>';
+  var go=step==='code'?t('plogin.verify'):t('plogin.send');
+  var off=locked||(step==='phone'&&so.locked)?' disabled':'';
+  var more=step==='code'?'<div class="row"><button type="button" class="btn ghost sm" data-act="pchange">'+t('plogin.change')+'</button><button type="button" class="btn ghost sm" data-act="presend"'+(so.locked?' disabled':'')+'>'+t('plogin.resend')+'</button></div>':'';
+  return '<section class="login"><div class="side"><span class="big">'+ic('shield')+'</span><h2>'+t('plogin.h')+'</h2><p>'+t('plogin.hb')+'</p></div>'+
+    '<form class="form" id="pLoginForm" autocomplete="off"><div><h2>'+t('plogin.t')+'</h2><p class="muted" style="margin-top:4px">'+t('plogin.s')+'</p></div>'+
+    field+demo+msg+'<button class="btn big" type="button" data-act="psubmit"'+off+'>'+go+'</button>'+more+
+    '<p class="note small"><b>'+t('plogin.hint')+'</b></p><p class="muted small">'+t('plogin.rule',{min:LIM.patient.lockMs/60000,max:LIM.patient.max,req:LIM.otp.max})+'</p></form></section>';
+}
+function viewLogin(){
+  var st=limStatus('staff'),msg='';
+  if(st.locked){var tm=mmss(st.remainMs);msg='<p class="err" role="alert">'+t('login.lock',{m:tm.m,s:tm.s})+'</p>'}
+  else if(S.loginBad)msg='<p class="err" role="alert">'+t('login.bad',{n:st.left})+'</p>';
+  var dis=st.locked?' disabled':'';
+  return '<section class="login"><div class="side"><span class="big">'+ic('shield')+'</span><h2>'+t('login.h')+'</h2><p>'+t('login.hb')+'</p></div>'+
+    '<form class="form" id="loginForm" autocomplete="off"><div><h2>'+t('login.t')+'</h2><p class="muted" style="margin-top:4px">'+t('login.s')+'</p></div>'+
+    '<label class="fld">'+t('login.id')+'<input class="inp" id="l-id" data-l="id" autocapitalize="characters" autocomplete="username" value="'+esc(S.login.id)+'"'+dis+'></label>'+
+    '<label class="fld">'+t('login.pin')+'<input class="inp" id="l-pin" data-l="pin" type="password" inputmode="numeric" autocomplete="current-password" value="'+esc(S.login.pin)+'"'+dis+'></label>'+
+    msg+'<button class="btn big" type="button" data-act="slogin" id="l-go"'+dis+'>'+t('login.btn')+'</button>'+
+    '<p class="muted small">'+t('login.rule',{min:LIM.staff.lockMs/60000,max:LIM.staff.max})+'</p></form></section>';
+}
+function tile(label,val,sub,icon,tint){
+  return '<div class="tile"><span class="ico" style="background:var(--c'+tint+');color:var(--c'+tint+'i)">'+ic(icon)+'</span><span class="eyebrow">'+label+'</span><b>'+val+'</b><span class="s">'+sub+'</span></div>';
+}
+function sampleControls(){
+  var any=Array.from(Store.appts.values()).some(function(a){return a.sample});
+  return '<section class="card"><h3>Demo data</h3><p class="muted small" style="margin:4px 0 12px">Fill the app with a sample clinic day to see the queue, dashboard and metrics working. Sample records are marked and can be removed.</p>'+
+    '<div class="row"><button class="btn" data-act="sample"'+(S.busy?' disabled':'')+'>'+(S.busy?'Working…':'Load sample day')+'</button>'+
+    (any?'<button class="btn ghost" data-act="clearsample"'+(S.busy?' disabled':'')+'>Remove sample data</button>':'')+'</div></section>';
+}
+function viewDesk(){
+  var today=todayStr(),all=Array.from(Store.appts.values()).filter(function(a){return a.date===today});
+  var c=function(st){return all.filter(function(a){return a.status===st}).length};
+  var q=S.deskQ.trim().toLowerCase();
+  var list=all.filter(function(a){
+    if(S.deskDoc!=='all'&&a.doctorId!==S.deskDoc)return false;
+    if(!q)return true;
+    return (a.name+' '+a.phone+' '+a.id).toLowerCase().indexOf(q)>=0;
+  });
+  var rank={in_consult:0,checked_in:1,booked:2,done:3,no_show:4,cancelled:5};
+  list.sort(function(x,y){return rank[x.status]-rank[y.status]||(x.slot||'').localeCompare(y.slot||'')||x.id.localeCompare(y.id)});
+  var rows=list.map(function(a,i){
+    var d=docOf(a.doctorId),tok=tokenOf(Store.appts,a),acts='';
+    if(a.status==='booked'){
+      acts='<button class="btn sm" data-act="checkin" data-id="'+a.id+'" data-via="desk">Check in</button>'+
+        '<button class="btn ghost sm" data-act="'+(a.emergency?'unemerg':'emerg')+'" data-id="'+a.id+'">'+(a.emergency?'Remove priority':'Priority')+'</button>'+
+        '<button class="btn ghost sm" data-act="noshow" data-id="'+a.id+'">No-show</button>'+
+        '<button class="btn ghost sm" data-act="remind" data-id="'+a.id+'">Reminder text</button>';
+    }else if(a.status==='checked_in'){
+      acts='<button class="btn ghost sm" data-act="'+(a.emergency?'unemerg':'emerg')+'" data-id="'+a.id+'">'+(a.emergency?'Remove priority':'Make emergency')+'</button>';
+    }
+    return '<tr class="'+(i%2?'zebra':'')+'"><td class="num">'+(a.walkin?'Walk-in':fmt12(a.slot))+'</td>'+
+      '<td><b>'+esc(a.name)+'</b>'+(a.age?' <span class="muted">, '+a.age+'</span>':'')+'<br><span class="muted small">'+esc(a.reason||'No reason given')+(a.phone?' · '+fmtPhone(a.phone):'')+'</span></td>'+
+      '<td>'+d.name+'<br><span class="muted small">'+d.dept+'</span></td><td>'+pill(a,'en')+'</td><td class="tk">'+(tok||'—')+'</td>'+
+      '<td class="num small">'+esc(a.id)+'</td><td><div class="acts">'+acts+'</div></td></tr>';
+  }).join('');
+  var walk='<section class="card">'+(S.walkOpen?'<h3>Emergency walk-in</h3><p class="muted small" style="margin:4px 0 14px">Adds the patient straight to the front of the chosen doctor’s queue.</p>'+
+    '<div class="grid2"><label class="fld">Patient name<input class="inp" id="w-name" data-w="name" value="'+esc(S.walk.name)+'"></label>'+
+    '<label class="fld">Age<input class="inp" id="w-age" data-w="age" inputmode="numeric" maxlength="3" value="'+esc(S.walk.age)+'"></label>'+
+    '<label class="fld">Doctor<select class="inp" id="w-doc" data-w="doctor">'+DOCTORS.map(function(d){return '<option value="'+d.id+'"'+(S.walk.doctor===d.id?' selected':'')+'>'+d.name+' ('+d.dept+')</option>'}).join('')+'</select></label>'+
+    '<label class="fld">Complaint<input class="inp" id="w-why" data-w="reason" value="'+esc(S.walk.reason)+'"></label></div>'+
+    '<div class="row" style="margin-top:14px"><button class="btn urgent" data-act="addwalk">Add to front of queue</button><button class="btn ghost" data-act="walktoggle">Close</button></div>':
+    '<div class="row between"><div><h3>Emergency walk-in</h3><p class="muted small">For patients who arrive without a booking and need to be seen first.</p></div><button class="btn urgent" data-act="walktoggle">Add emergency</button></div>')+'</section>';
+  var rem=S.reminder?'<section class="card"><div class="row between"><h3>Reminder text for '+esc(S.reminder.id)+'</h3><button class="btn ghost sm" data-act="closeremind">Close</button></div>'+
+    '<textarea class="inp" readonly rows="3" style="margin-top:10px" id="remtxt">'+esc(S.reminder.text)+'</textarea><div class="row" style="margin-top:10px"><button class="btn sm" data-act="copyremind">Copy text</button><span class="muted small">Paste into your SMS or WhatsApp tool. This app does not send messages itself.</span></div></section>':'';
+  var empty=!all.length?'<section class="card empty"><h3>No appointments today</h3><p>Bookings made by patients will appear here. You can also add an emergency walk-in or load the sample day below.</p></section>':'';
+  return '<div class="stack">'+
+    '<div class="tiles">'+tile('Booked',c('booked'),'not arrived yet','calendar',3)+tile('Waiting',c('checked_in'),'checked in','clock',4)+
+    tile('With doctor',c('in_consult'),'in consultation','pulse',1)+tile('Done',c('done'),'seen today','check',6)+tile('No-shows',c('no_show'),'missed slots','alert',2)+'</div>'+
+    walk+rem+
+    '<div class="row"><input class="inp" id="desk-q" style="flex:1;min-width:200px" data-s="deskQ" placeholder="Search name, mobile or booking ID" value="'+esc(S.deskQ)+'">'+
+    '<select class="inp" id="desk-doc" style="width:auto;min-width:180px" data-s="deskDoc"><option value="all">All doctors</option>'+DOCTORS.map(function(d){return '<option value="'+d.id+'"'+(S.deskDoc===d.id?' selected':'')+'>'+d.name+'</option>'}).join('')+'</select></div>'+
+    (all.length?'<div class="tablewrap"><table><thead><tr><th>Time</th><th>Patient</th><th>Doctor</th><th>Status</th><th>Token</th><th>Booking ID</th><th>Actions</th></tr></thead><tbody>'+
+      (rows||'<tr><td colspan="7" class="muted">No appointments match this search.</td></tr>')+'</tbody></table></div>':empty)+
+    (all.length?'':sampleControls())+'</div>';
+}
+function viewDoctor(){
+  var today=todayStr(),d=docOf(S.docView),q=queueOf(Store.appts,d.id,today);
+  var chips='<div class="chips" role="group">'+DOCTORS.map(function(x){
+    var qq=queueOf(Store.appts,x.id,today);
+    return '<button class="chip" data-act="docview" data-v="'+x.id+'" aria-pressed="'+(x.id===S.docView)+'">'+x.name+(qq.waiting.length?' · '+qq.waiting.length:'')+'</button>';
+  }).join('')+'</div>';
+  var now;
+  if(q.serving){
+    var s=q.serving,mm=Math.max(0,Math.round((Date.now()-s.calledAt)/60000));
+    now='<div class="nowcard"><span class="eyebrow">Now seeing</span><div class="row between"><div><h2 style="font-size:26px">'+esc(s.name)+(s.age?', '+s.age:'')+'</h2><p class="muted" style="margin-top:2px">'+esc(s.reason||'No reason given')+'</p></div><div class="tok" style="color:var(--accent)">'+tokenOf(Store.appts,s)+'</div></div>'+
+      '<div class="row"><span class="pill in_consult">In consultation for '+mm+' min</span>'+(s.emergency?'<span class="pill emerg">Emergency</span>':'')+'</div>'+
+      '<div class="row"><button class="btn big" data-act="complete" data-id="'+s.id+'">Complete visit</button><button class="btn ghost" data-act="noshow" data-id="'+s.id+'">Patient left, mark no-show</button></div></div>';
+  }else{
+    now='<div class="nowcard"><span class="eyebrow">Now seeing</span><p class="muted">'+(q.waiting.length?'No one is in the room.':'No one is in the room and nobody is waiting.')+'</p>'+
+      '<div><button class="btn big" data-act="callnext" data-id="'+d.id+'"'+(q.waiting.length?'':' disabled')+'>Call next patient'+(q.waiting.length?' ('+tokenOf(Store.appts,q.waiting[0])+')':'')+'</button></div></div>';
+  }
+  var next=q.waiting.length?q.waiting.map(function(a,i){
+    var w=Math.max(0,Math.round((Date.now()-a.checkedInAt)/60000));
+    return '<div class="qrow"><span class="tk" style="font-size:18px">'+tokenOf(Store.appts,a)+'</span><div style="min-width:0"><b>'+esc(a.name)+(a.age?', '+a.age:'')+'</b><br><span class="muted small">'+esc(a.reason||'No reason given')+' · waiting '+w+' min</span></div>'+
+      '<div class="row">'+(a.emergency?'<span class="pill emerg">Emergency</span>':'<button class="btn ghost sm" data-act="emerg" data-id="'+a.id+'">Make emergency</button>')+(i===0&&!q.serving?'<span class="pill checked_in">Next</span>':'')+'</div></div>';
+  }).join(''):'<p class="muted">Nobody is waiting.</p>';
+  var sched=q.list.slice().sort(function(x,y){return (x.slot||'').localeCompare(y.slot||'')}).map(function(a){
+    return '<div class="qrow"><span class="num" style="font-weight:700">'+(a.walkin?'Walk-in':fmt12(a.slot))+'</span><div style="min-width:0"><b>'+esc(a.name)+'</b><br><span class="muted small">'+esc(a.reason||'No reason given')+'</span></div><div>'+pill(a,'en')+'</div></div>';
+  }).join('')||'<p class="muted">No appointments today.</p>';
+  return '<div class="stack">'+chips+'<div class="cols"><div class="stack">'+now+
+    '<section class="card"><h2>Next in line</h2><div style="margin-top:8px">'+next+'</div><p class="muted small" style="margin-top:10px">Order: emergencies first, then by slot time, or by check-in time for late arrivals.</p></section></div>'+
+    '<aside class="rail"><section class="card"><h2>Today’s schedule</h2><p class="muted small" style="margin:2px 0 6px">'+d.dept+' · Room '+d.rn+'</p>'+sched+'</section></aside></div></div>';
+}
+function viewInsights(){
+  var st=statsFor(Store.appts,todayStr(),Date.now());
+  var hrs=Object.keys(st.hours).map(Number),lo=Math.min.apply(null,hrs.concat([9])),hi=Math.max.apply(null,hrs.concat([16])),mx=Math.max.apply(null,[1].concat(hrs.map(function(h){return st.hours[h]})));
+  var bars='';
+  for(var h=lo;h<=hi;h++){var n=st.hours[h]||0;bars+='<div><em>'+(n||'')+'</em><i style="height:'+Math.round(n/mx*100)+'%"></i><span>'+(h%12||12)+(h>=12?'p':'a')+'</span></div>'}
+  var rows=st.perDoc.map(function(p,i){
+    return '<tr class="'+(i%2?'zebra':'')+'"><td><b>'+p.doctor.name+'</b><br><span class="muted small">'+p.doctor.dept+'</span></td><td class="num">'+p.total+'</td><td class="num">'+p.seen+'</td><td class="num">'+p.waiting+'</td><td class="num">'+mins(p.avgWait)+'</td>'+
+      '<td><div class="row" style="flex-wrap:nowrap"><div class="bar-h" style="flex:1"><i style="width:'+Math.round((p.util||0)*100)+'%"></i></div><span class="num small" style="width:38px;text-align:right">'+pct(p.util)+'</span></div></td></tr>';
+  }).join('');
+  return '<div class="stack"><div><h2>Today’s impact</h2><p class="muted" style="margin-top:4px">Figures for today, updated live.</p></div>'+
+    '<div class="tiles">'+tile('Waiting time',mins(st.avgWait),'check-in to consultation','clock',4)+tile('No-show rate',pct(st.noShowRate),st.noShow+' of '+(st.done+st.noShow)+' finished slots','alert',2)+
+    tile('Doctor utilisation',pct(st.util),'clinic hours spent on care','pulse',1)+tile('Satisfaction',st.sat==null?'—':st.sat.toFixed(1)+' / 5',st.ratedN+' rating'+(st.ratedN===1?'':'s'),'star',5)+
+    tile('Waiting room',st.waitingNow,'people now, peak '+st.peak+' today','users',3)+'</div>'+
+    '<section class="card"><h3>Arrivals by hour</h3><div class="hours" role="img" aria-label="Check-ins by hour of day">'+bars+'</div></section>'+
+    '<div class="tablewrap"><table><thead><tr><th>Doctor</th><th>Booked</th><th>Seen</th><th>Waiting</th><th>Avg wait</th><th style="min-width:160px">Utilisation</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    sampleControls()+'</div>';
+}
+
+/* ---------- render ---------- */
+function render(){
+  var main=$('#main'),ae=document.activeElement,keep=null;
+  if(ae&&ae.id&&main.contains(ae))keep={id:ae.id,s:ae.selectionStart,e:ae.selectionEnd};
+  var sy=window.scrollY;
+  document.documentElement.lang=S.lang;
+  var sel=$('#lang');if(sel){if(sel.value!==S.lang)sel.value=S.lang;sel.setAttribute('aria-label',t('lang.label'))}
+  renderHeader();renderFooter();
+  var html;
+  if(S.role==='patient'&&!S.patAuth)html=viewPatientLogin();
+  else if(S.role==='patient')html=S.pTab==='book'?viewBook():S.pTab==='visit'?viewVisit():viewBoard();
+  else if(!S.staffAuth)html=viewLogin();
+  else html=S.sTab==='desk'?viewDesk():S.sTab==='doctor'?viewDoctor():viewInsights();
+  main.innerHTML=html;
+  renderModal();
+  if(keep){
+    var el=document.getElementById(keep.id);
+    if(el&&!el.disabled){el.focus({preventScroll:true});try{if(keep.s!=null)el.setSelectionRange(keep.s,keep.e)}catch(_){}}
+  }
+  window.scrollTo(0,sy);
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');
+  if(!b||b.disabled)return;
+  var act=b.dataset.act,v=b.dataset.v,id=b.dataset.id;
+  if(act==='termsbg'){if(e.target!==b)return;S.terms=false;render();return}
+  switch(act){
+    case 'role':S.role=v;render();window.scrollTo(0,0);break;
+    case 'tab':if(S.role==='patient'){S.pTab=v;if(v!=='book'&&S.resched){S.resched=null}}else S.sTab=v;render();window.scrollTo(0,0);break;
+    case 'doc':S.docId=v;S.slot=null;S.date=null;S.err='';render();break;
+    case 'date':S.date=v;S.slot=null;S.err='';render();break;
+    case 'slot':S.slot=v;S.err='';render();break;
+    case 'chan':S.form.channel=v;render();break;
+    case 'book':doBook();break;
+    case 'resched':doResched();break;
+    case 'startresched':S.resched=id;S.slot=null;S.date=null;S.err='';S.pTab='book';render();window.scrollTo(0,0);break;
+    case 'cancelresched':S.resched=null;S.slot=null;S.pTab='visit';render();break;
+    case 'dismiss':S.banner=null;render();break;
+    case 'checkin':checkIn(id,b.dataset.via||'app');break;
+    case 'qr':S.qr[id]=!S.qr[id];render();break;
+    case 'cancel':S.cancelId=id;render();break;
+    case 'cancelno':S.cancelId=null;render();break;
+    case 'cancelyes':S.cancelId=null;setStatus(id,'cancelled',{cancelledAt:Date.now()});break;
+    case 'rate':run(function(){return Store.patch(id,{rating:+v})},t('toast.thanks'));break;
+    case 'lookup':doLookup();break;
+    case 'terms':S.terms=!S.terms;render();break;
+    case 'signout':signOut();break;
+    case 'psubmit':if(S.pl.step==='code')doVerify();else doSendOtp();break;
+    case 'slogin':doLogin();break;
+    case 'psignout':patSignOut();break;
+    case 'pchange':S.pl.step='phone';S.pl.code='';S.pl.otp=null;S.plMsg=null;render();break;
+    case 'presend':doSendOtp();break;
+    case 'pfill':S.pl.code=S.pl.otp||'';doVerify();break;
+    case 'emerg':setEmergency(id,true);break;
+    case 'unemerg':setEmergency(id,false);break;
+    case 'noshow':setStatus(id,'no_show');break;
+    case 'complete':setStatus(id,'done',{doneAt:Date.now()});break;
+    case 'callnext':callNext(id);break;
+    case 'docview':S.docView=v;render();break;
+    case 'walktoggle':S.walkOpen=!S.walkOpen;render();break;
+    case 'addwalk':addWalkIn();break;
+    case 'remind':{var ap=Store.appts.get(id);if(ap){S.reminder={id:id,text:reminderText(ap)};render()}break}
+    case 'closeremind':S.reminder=null;render();break;
+    case 'copyremind':if(S.reminder)copyText(S.reminder.text);break;
+    case 'sample':loadSample();break;
+    case 'clearsample':clearSample();break;
+  }
+});
+document.addEventListener('input',function(e){
+  var tg=e.target;
+  if(tg.dataset.f){S.form[tg.dataset.f]=tg.value}
+  else if(tg.dataset.w){S.walk[tg.dataset.w]=tg.value}
+  else if(tg.dataset.l){S.login[tg.dataset.l]=tg.value}
+  else if(tg.dataset.p){S.pl[tg.dataset.p]=tg.value;if(tg.dataset.p==='code'&&/^\d{4}$/.test(tg.value.trim()))doVerify()}
+  else if(tg.dataset.s==='deskQ'){S.deskQ=tg.value;render()}
+});
+document.addEventListener('change',function(e){
+  var tg=e.target;
+  if(tg.id==='lang'){S.lang=tg.value;try{localStorage.setItem('aq.lang',S.lang)}catch(_){}render()}
+  else if(tg.dataset.s==='deskDoc'){S.deskDoc=tg.value;render()}
+  else if(tg.dataset.w==='doctor'){S.walk.doctor=tg.value}
+});
+document.addEventListener('submit',function(e){e.preventDefault();if(e.target.id==='loginForm')doLogin();else if(e.target.id==='pLoginForm'){if(S.pl.step==='code')doVerify();else doSendOtp()}});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.id==='lookup'){doLookup()}
+  if(e.key==='Enter'&&(e.target.id==='p-phone'||e.target.id==='p-code')){e.preventDefault();if(S.pl.step==='code')doVerify();else doSendOtp()}
+  if(e.key==='Enter'&&(e.target.id==='l-id'||e.target.id==='l-pin')){e.preventDefault();doLogin()}
+  if(e.key==='Escape'&&S.terms){S.terms=false;render()}
+});
+
+/* ---------- start ---------- */
+(function(){var sel=$('#lang');sel.innerHTML=LANGS.map(function(l){return '<option value="'+l+'">'+LANG_NAME[l]+'</option>'}).join('');sel.value=S.lang})();
+try{var sa=sessionStorage.getItem('aq.staff');if(sa)S.staffAuth=sa}catch(_){}
+try{var pa=sessionStorage.getItem('aq.patient');if(pa){S.patAuth=pa;remember(null,pa)}}catch(_){}
+if(limStatus('staff').locked||limStatus('lookup').locked||limStatus('patient').locked||limStatus('otp').locked)ensureTicker();
+render();
+Store.on(render);
+setInterval(render,30000);
+
+function startLocal(){
+  makeSample(Date.now()).forEach(function(a){Store.appts.set(a.id,a)});
+  S.mode='demo';render();
+}
+(function init(){
+  if(!window.claude||!window.claude.use){startLocal();return}
+  Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+    var db=r[0],user=r[1];
+    var p=user?Promise.all([user.id(),user.can('data.write')]):Promise.resolve([null,null]);
+    return p.then(function(u){
+      Store.uid=u[0];S.readOnly=(u[1]===false);
+      if(!db){startLocal();return}
+      Store.db=db;
+      db.collection('appts').onSnapshot(function(snap){
+        var m=new Map();snap.docs.forEach(function(d){var x=d.data();x.id=d.id;m.set(d.id,x)});
+        Store.appts=m;S.mode='live';render();
+      },function(){S.mode='demo';render();toast('Lost the connection to the shared data.')});
+    });
+  }).catch(startLocal);
+})();
+})();
+</script>
+
+</body></html>
